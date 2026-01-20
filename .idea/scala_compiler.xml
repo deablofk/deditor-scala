@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <option name="separateProdTestSources" value="true" />
+    <profile name="sbt 1" modules="untitled1" />
+    <profile name="sbt 2" modules="untitled1.main">
+      <parameters>
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/target/scala-3.7.4/meta" />
+        <parameter value="-P:scalanative:positionRelativizationPaths:/home/cwby/NewProject/untitled1/src/main/scala;/home/cwby/NewProject/untitled1/src/main/scala-3;/home/cwby/NewProject/untitled1/src/main/java;/home/cwby/NewProject/untitled1/target/scala-3.7.4/src_managed/main" />
+      </parameters>
+      <plugins>
+        <plugin path="$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.7.4/0.5.9/nscplugin_3.7.4-0.5.9.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 3" modules="untitled1.test">
+      <parameters>
+        <parameter value="-P:scalanative:positionRelativizationPaths:/home/cwby/NewProject/untitled1/src/main/scala;/home/cwby/NewProject/untitled1/src/main/scala-3;/home/cwby/NewProject/untitled1/src/main/java;/home/cwby/NewProject/untitled1/target/scala-3.7.4/src_managed/main" />
+        <parameter value="-Xsemanticdb" />
+        <parameter value="-semanticdb-target" />
+        <parameter value="$PROJECT_DIR$/target/scala-3.7.4/test-meta" />
+        <parameter value="-P:scalanative:positionRelativizationPaths:/home/cwby/NewProject/untitled1/src/test/scala;/home/cwby/NewProject/untitled1/src/test/scala-3;/home/cwby/NewProject/untitled1/src/test/java;/home/cwby/NewProject/untitled1/target/scala-3.7.4/src_managed/test" />
+      </parameters>
+      <plugins>
+        <plugin path="$USER_HOME$/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nscplugin_3.7.4/0.5.9/nscplugin_3.7.4-0.5.9.jar" />
+      </plugins>
+    </profile>
+  </component>
+</project>

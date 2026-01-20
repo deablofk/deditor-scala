@@ -1,0 +1,15 @@
+name = "jdtls"
+description = "Java language server."
+homepage = "https://github.com/eclipse/eclipse.jdt.ls"
+licenses = ["EPL-2.0"]
+languages = ["Java"]
+categories = ["LSP"]
+
+[source]
+type = "generic"
+packageOrUrl = "https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1.52.0/jdt-language-server-1.52.0-202510301627.tar.gz"
+executable = "bin/jdtls -data /home/cwby/.cache/jdtls-workspace"
+
+[trigger]
+filetypes = ["java"]
+projectRoot = ["pom.xml", "build.gradle", "build.gradle.kts"]

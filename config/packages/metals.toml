@@ -1,0 +1,15 @@
+name = "metals"
+description = "Scala language server (Metals)."
+homepage = "https://scalameta.org/metals/"
+licenses = ["Apache-2.0"]
+languages = ["Scala"]
+categories = ["LSP"]
+
+[source]
+type = "command"
+packageOrUrl = "metals"
+executable = "metals"
+
+[trigger]
+filetypes = ["scala", "sbt"]
+projectRoot = ["build.sbt", "build.sc", "project/build.properties", "project/plugins.sbt"]

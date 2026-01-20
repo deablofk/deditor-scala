@@ -1,0 +1,102 @@
+[cursor]
+blink = 500 # cursor blink interval
+color = "#77FFFFFF"
+select = "#8066B9FF"
+
+[font]
+family = "Iosevka Nerd Font Mono"
+size = 32
+
+[theme]
+background = "#FF1B1B1B"
+numberColor = "#FF666666"
+
+[treesitterParsers]
+mode = "on_demand"
+
+[[treesitterParsers.grammars]]
+language = "java"
+filetypes = ["java"]
+
+[[treesitterParsers.grammars]]
+language = "scala"
+filetypes = ["scala", "sbt"]
+
+[[treesitterParsers.grammars]]
+language = "toml"
+filetypes = ["toml"]
+
+[[treesitterParsers.grammars]]
+language = "bash"
+filetypes = ["sh"]
+
+[[treesitterParsers.grammars]]
+language = "python"
+filetypes = ["py"]
+
+[[treesitterParsers.grammars]]
+language = "rust"
+filetypes = ["rs"]
+
+[[treesitterParsers.grammars]]
+language = "markdown"
+repo = "https://github.com/tree-sitter-grammars/tree-sitter-markdown"
+filetypes = ["md", "markdown"]
+
+[treesitter]
+default = "#A9B7C6"
+keyword = "#FFC66D"
+keyword.control = "#FFC66D"
+keyword.control.conditional = "#FFC66D"
+keyword.control.repeat = "#FFC66D"
+keyword.control.return = "#FFC66D"
+keyword.control.import = "#FFC66D"
+keyword.control.exception = "#FFC66D"
+keyword.function = "#FFC66D"
+keyword.operator = "#FFC66D"
+keyword.modifier = "#FFC66D"
+keyword.type = "#FFC66D"
+type = "#4E90F0"
+type.builtin = "#FFC66D"
+function = "#9876AA"
+function.builtin = "#FFC66D"
+function.method = "#9876AA"
+variable = "#9876AA"
+variable.builtin = "#FFC66D"
+variable.parameter = "#9876AA"
+constant = "#9876AA"
+constant.builtin = "#FFC66D"
+string = "#6A8759"
+number = "#6897BB"
+comment = "#808080"
+operator = "#CC7832"
+punctuation = "#CC7832"
+punctuation.bracket = "#CC7832"
+attribute = "#BBB529"
+
+# --- MARKDOWN ---
+# headings (markdown uses text.title, not markup.heading)
+text.title = "#FFC66D"
+markup.heading = "#FFC66D"
+# emphasis
+text.emphasis = "#9876AA"
+text.strong = "#FFC66D"
+markup.bold = "#FFC66D"
+markup.italic = "#9876AA"
+markup.strikethrough = "#808080"
+# lists & quotes
+markup.list = "#CC7832"
+markup.quote = "#808080"
+# links
+text.uri = "#6897BB"
+text.reference = "#4E90F0"
+markup.link = "#4E90F0"
+markup.link.label = "#4E90F0"
+markup.link.url = "#6897BB"
+# inline & block code
+text.literal = "#6A8759"
+markup.code = "#6A8759"
+markup.raw = "#6A8759"
+# punctuation inside markdown
+punctuation.special = "#CC7832"
+punctuation.delimiter = "#CC7832"
