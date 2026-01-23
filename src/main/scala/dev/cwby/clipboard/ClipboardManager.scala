@@ -1,7 +1,7 @@
 package dev.cwby.clipboard
 
-import dev.cwby.bindings.SDL3.SDLClipboard.SDL_GetClipboardText
-import dev.cwby.bindings.SDL3.SDLClipboard.SDL_SetClipboardText
+
+import dev.cwby.guitk.bindings.sdl.SDLClipboard.{SDL_GetClipboardText, SDL_SetClipboardText}
 
 import scala.scalanative.unsafe.Zone
 import scala.scalanative.unsafe.fromCString
@@ -30,7 +30,7 @@ private val internalClipboard = ClipboardState("")
 @inline private def setSystemClipboard(state: ClipboardState, text: String): Unit = {
   if (state.text != text) {
     Zone {
-      SDL_SetClipboardText(toCString(text))
+      SDL_SetClipboardText(text)
     }
     state.text = text
   }
@@ -40,10 +40,9 @@ private val internalClipboard = ClipboardState("")
   if (state.text.nonEmpty) return state.text
 
   val cstr = SDL_GetClipboardText()
-  val text = if cstr != null then fromCString(cstr) else ""
 
-  state.text = text
-  text
+  state.text = cstr
+  state.text
 }
 
 @inline def setClipboardContent(kind: ClipboardType, text: String): Unit = {

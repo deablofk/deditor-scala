@@ -1,8 +1,8 @@
 package dev.cwby.terminal
 
-import dev.cwby.bindings.SDL3.SDLKeyboard
 import dev.cwby.graphics.Engine
 import dev.cwby.graphics.layout.FloatingWindow
+import dev.cwby.guitk.bindings.sdl.SDLKeyboard
 
 final class TerminalWindow(x: Float, y: Float, width: Float, height: Float)
     extends FloatingWindow(x, y, width, height, 0.9f):

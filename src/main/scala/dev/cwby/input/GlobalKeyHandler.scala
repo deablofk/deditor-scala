@@ -2,7 +2,6 @@ package dev.cwby.input
 
 import dev.cwby.WindowManager
 import dev.cwby.appendCommandBuffer
-import dev.cwby.bindings.SDL3._
 import dev.cwby.clearCommandBuffer
 import dev.cwby.clipboard.ClipboardType
 import dev.cwby.clipboard.getClipboardContent
@@ -10,7 +9,7 @@ import dev.cwby.clipboard.setClipboardContent
 import dev.cwby.commandHandlerState
 import dev.cwby.editor.TextBuffer
 import dev.cwby.editor.TextInteractionMode
-import dev.cwby.editor.TextInteractionMode._
+import dev.cwby.editor.TextInteractionMode.*
 import dev.cwby.executeCommand
 import dev.cwby.getBufferMode
 import dev.cwby.getCommandBuffer
@@ -21,19 +20,21 @@ import dev.cwby.graphics.layout.TiledWindow
 import dev.cwby.graphics.layout.component.TelescopeComponent
 import dev.cwby.graphics.layout.component.TelescopeWindow
 import dev.cwby.graphics.layout.component.TextComponent
+import dev.cwby.guitk.bindings.sdl.SDLConstants.*
+import dev.cwby.guitk.bindings.sdl.{SDLEventHelpers, SDLKeyboard, SDL_Event}
 import dev.cwby.lsp.CompletionItemKind
 import dev.cwby.lsp.LSPManager
 import dev.cwby.setBufferMode
 import dev.cwby.terminal.TerminalWindow
 
-import scala.scalanative.unsafe._
+import scala.scalanative.unsafe.*
 
 object GlobalKeyHandler:
-  var lastKeyPressTime: Long                = 0
-  var startVisualX: Int                     = 0
-  var startVisualY: Int                     = 0
-  private var modeNode: TrieNode            = KeybindingTrie.getRoot(getBufferMode)
-  private var anyNode: TrieNode             = KeybindingTrie.getRoot(TextInteractionMode.ANY)
+  var lastKeyPressTime: Long = 0
+  var startVisualX: Int = 0
+  var startVisualY: Int = 0
+  private var modeNode: TrieNode = KeybindingTrie.getRoot(getBufferMode)
+  private var anyNode: TrieNode = KeybindingTrie.getRoot(TextInteractionMode.ANY)
   private var lastMode: TextInteractionMode = getBufferMode
 
   // TODO: refactor this code to reduce complexity, calculating TABs, must be in other place
@@ -41,15 +42,15 @@ object GlobalKeyHandler:
     if buffer == null || buffer.lines == null || buffer.lines.isEmpty then return 0
     if buffer.cursorY < 0 || buffer.cursorY >= buffer.lines.length then return 0
 
-    val font        = FontManager.getDefaultFont()
-    val line        = buffer.lines(buffer.cursorY)
+    val font = FontManager.getDefaultFont()
+    val line = buffer.lines(buffer.cursorY)
     val safeCursorX = Math.min(Math.max(0, cursorX), line.length())
 
-    val tabSize    = 4
+    val tabSize = 4
     val spaceWidth = font.measureText(" ")
 
     var xPx = 0.0f
-    var i   = 0
+    var i = 0
     while i < safeCursorX && i < line.length() do
       val codePoint = line.toString.codePointAt(i)
       if codePoint == '\t' then
@@ -65,17 +66,16 @@ object GlobalKeyHandler:
   private def getCurrentWordPrefix(buffer: TextBuffer): String =
     if buffer == null || buffer.lines == null || buffer.lines.isEmpty then return ""
     if buffer.cursorY < 0 || buffer.cursorY >= buffer.lines.length then return ""
-    
+
     val line = buffer.lines(buffer.cursorY)
     if line.isEmpty then return ""
-    
+
     val cursorX = Math.min(buffer.cursorX, line.length())
     var start = cursorX
     while start > 0 && Character.isLetterOrDigit(line.charAt(start - 1)) do start -= 1
-    
+
     if start < cursorX then line.substring(start, cursorX) else ""
 
-  
 
   private case class BufferPos(y: Int, x: Int)
 
@@ -92,12 +92,9 @@ object GlobalKeyHandler:
     // TODO: wtf is this (224...231)? Replace for NON Magic numbers
     scancode match
       case 224 | 225 | 226 | 227 | 228 | 229 | 230 | 231 => true
-      case _                                             => false
+      case _ => false
   }
 
-  
-
-  
 
   private def findEnclosingPairInBuffer(b: TextBuffer, open: Char, close: Char): Option[(BufferPos, BufferPos)] =
     if b == null then return None
@@ -105,13 +102,13 @@ object GlobalKeyHandler:
 
     val cursor = BufferPos(b.cursorY, b.cursorX)
 
-    var stack: List[BufferPos]               = Nil
+    var stack: List[BufferPos] = Nil
     var best: Option[(BufferPos, BufferPos)] = None
 
     var y = 0
     while y < b.lines.length do
       val line = b.lines(y)
-      var x    = 0
+      var x = 0
       while x < line.length() do
         val ch = line.charAt(x)
         if ch == open then stack = BufferPos(y, x) :: stack
@@ -133,24 +130,24 @@ object GlobalKeyHandler:
   private def deleteInsidePairAndYank(b: TextBuffer, openPos: BufferPos, closePos: BufferPos): Unit =
     if b == null then return
 
-    val openY  = Math.max(0, Math.min(openPos.y, b.lines.length - 1))
+    val openY = Math.max(0, Math.min(openPos.y, b.lines.length - 1))
     val closeY = Math.max(0, Math.min(closePos.y, b.lines.length - 1))
 
     if openY > closeY then return
 
-    val openLine  = b.lines(openY)
+    val openLine = b.lines(openY)
     val closeLine = b.lines(closeY)
 
-    val openX  = Math.max(0, Math.min(openPos.x, Math.max(0, openLine.length() - 1)))
+    val openX = Math.max(0, Math.min(openPos.x, Math.max(0, openLine.length() - 1)))
     val closeX = Math.max(0, Math.min(closePos.x, Math.max(0, closeLine.length() - 1)))
 
     val closeIndent = leadingWhitespace(closeLine)
     val closeSuffix = closeLine.substring(closeX, closeLine.length())
 
     if openY == closeY then
-      val start        = Math.min(openX + 1, openLine.length())
+      val start = Math.min(openX + 1, openLine.length())
       val endExclusive = Math.max(start, closeX)
-      val inside       = openLine.substring(start, endExclusive)
+      val inside = openLine.substring(start, endExclusive)
       if inside.forall(_.isWhitespace) then b.gotoPosition(start, openY)
       else
         b.pushUndoState()
@@ -160,7 +157,7 @@ object GlobalKeyHandler:
       return
 
     val yankBuilder = new StringBuilder()
-    val startX      = Math.min(openX + 1, openLine.length())
+    val startX = Math.min(openX + 1, openLine.length())
     yankBuilder.append(openLine.substring(startX, openLine.length())).append("\n")
     var y = openY + 1
     while y < closeY do
@@ -177,7 +174,7 @@ object GlobalKeyHandler:
 
     openLine.delete(startX, openLine.length())
 
-    val innerIndent  = b.calculateIndentation(openLine.toString)
+    val innerIndent = b.calculateIndentation(openLine.toString)
     val newCloseLine = new StringBuilder(closeIndent).append(closeSuffix)
     val newInnerLine = new StringBuilder(innerIndent)
 
@@ -206,7 +203,7 @@ object GlobalKeyHandler:
     val next = line.charAt(startX + 1)
     if next == '!' || next == '?' then return None
 
-    var i         = startX + 1
+    var i = startX + 1
     var isClosing = false
     if i < len && line.charAt(i) == '/' then
       isClosing = true
@@ -230,26 +227,26 @@ object GlobalKeyHandler:
     Some(ParsedTag(name = name, isClosing = isClosing, isSelfClosing = isSelfClosing, endX = end))
 
   private case class TagMatch(
-      openY: Int,
-      openStartX: Int,
-      openEndX: Int,
-      closeY: Int,
-      closeStartX: Int,
-      closeEndX: Int,
-      name: String
-  )
+                               openY: Int,
+                               openStartX: Int,
+                               openEndX: Int,
+                               closeY: Int,
+                               closeStartX: Int,
+                               closeEndX: Int,
+                               name: String
+                             )
 
   private def findEnclosingTagInBuffer(b: TextBuffer): Option[TagMatch] =
     if b == null then return None
     if b.lines == null || b.lines.isEmpty then return None
 
-    val cursor                 = BufferPos(b.cursorY, b.cursorX)
+    val cursor = BufferPos(b.cursorY, b.cursorX)
     var best: Option[TagMatch] = None
 
     var y = b.cursorY
     while y >= 0 do
       val line = b.lines(y)
-      var x    = Math.min(if y == b.cursorY then b.cursorX else line.length() - 1, line.length() - 1)
+      var x = Math.min(if y == b.cursorY then b.cursorX else line.length() - 1, line.length() - 1)
       while x >= 0 do
         if line.charAt(x) == '<' then
           parseTagInLine(line, x) match
@@ -257,13 +254,13 @@ object GlobalKeyHandler:
               val openStart = BufferPos(y, x)
               BufferPos(y, tag.endX)
 
-              var depth                                      = 1
-              var yy                                         = y
-              val xx                                         = tag.endX + 1
+              var depth = 1
+              var yy = y
+              val xx = tag.endX + 1
               var foundClose: Option[(BufferPos, BufferPos)] = None
 
               while yy < b.lines.length && foundClose.isEmpty do
-                val l     = b.lines(yy)
+                val l = b.lines(yy)
                 var scanX = if yy == y then xx else 0
                 while scanX < l.length() && foundClose.isEmpty do
                   if l.charAt(scanX) == '<' then
@@ -302,13 +299,13 @@ object GlobalKeyHandler:
       case None =>
         ()
       case Some(m) =>
-        val openLine  = b.lines(m.openY)
+        val openLine = b.lines(m.openY)
         val closeLine = b.lines(m.closeY)
 
         val startY = m.openY
         val startX = Math.min(m.openEndX + 1, openLine.length())
-        val endY   = m.closeY
-        val endX   = Math.max(0, Math.min(m.closeStartX, closeLine.length()))
+        val endY = m.closeY
+        val endX = Math.max(0, Math.min(m.closeStartX, closeLine.length()))
 
         val yankBuilder = new StringBuilder()
         if startY == endY then yankBuilder.append(openLine.substring(startX, endX))
@@ -337,7 +334,7 @@ object GlobalKeyHandler:
         else
           openLine.delete(startX, openLine.length())
 
-          val innerIndent  = leadingWhitespace(openLine)
+          val innerIndent = leadingWhitespace(openLine)
           val newCloseLine = new StringBuilder(closeIndent).append(closeSuffix)
           val newInnerLine = new StringBuilder(innerIndent)
 
@@ -356,13 +353,13 @@ object GlobalKeyHandler:
 
     val cursor = BufferPos(b.cursorY, b.cursorX)
 
-    var stack: List[BufferPos]               = Nil
+    var stack: List[BufferPos] = Nil
     var best: Option[(BufferPos, BufferPos)] = None
 
     var y = 0
     while y < b.lines.length do
       val line = b.lines(y)
-      var x    = 0
+      var x = 0
       while x < line.length() do
         val ch = line.charAt(x)
         if ch == quote && !isEscapedAt(line, x) then
@@ -385,23 +382,23 @@ object GlobalKeyHandler:
   private def deleteInsideQuoteAndYank(b: TextBuffer, openPos: BufferPos, closePos: BufferPos): Unit =
     if b == null then return
 
-    val openY  = Math.max(0, Math.min(openPos.y, b.lines.length - 1))
+    val openY = Math.max(0, Math.min(openPos.y, b.lines.length - 1))
     val closeY = Math.max(0, Math.min(closePos.y, b.lines.length - 1))
 
     if openY > closeY then return
 
-    val openLine  = b.lines(openY)
+    val openLine = b.lines(openY)
     val closeLine = b.lines(closeY)
-    val openX     = Math.max(0, Math.min(openPos.x, Math.max(0, openLine.length() - 1)))
-    val closeX    = Math.max(0, Math.min(closePos.x, Math.max(0, closeLine.length() - 1)))
+    val openX = Math.max(0, Math.min(openPos.x, Math.max(0, openLine.length() - 1)))
+    val closeX = Math.max(0, Math.min(closePos.x, Math.max(0, closeLine.length() - 1)))
 
     val closeIndent = leadingWhitespace(closeLine)
     val closeSuffix = closeLine.substring(closeX, closeLine.length())
 
     if openY == closeY then
-      val start        = Math.min(openX + 1, openLine.length())
+      val start = Math.min(openX + 1, openLine.length())
       val endExclusive = Math.max(start, closeX)
-      val inside       = openLine.substring(start, endExclusive)
+      val inside = openLine.substring(start, endExclusive)
       if inside.forall(_.isWhitespace) then b.gotoPosition(start, openY)
       else
         b.pushUndoState()
@@ -411,7 +408,7 @@ object GlobalKeyHandler:
       return
 
     val yankBuilder = new StringBuilder()
-    val startX      = Math.min(openX + 1, openLine.length())
+    val startX = Math.min(openX + 1, openLine.length())
     yankBuilder.append(openLine.substring(startX, openLine.length())).append("\n")
     var y = openY + 1
     while y < closeY do
@@ -429,7 +426,7 @@ object GlobalKeyHandler:
 
     openLine.delete(startX, openLine.length())
 
-    val innerIndent  = leadingWhitespace(openLine)
+    val innerIndent = leadingWhitespace(openLine)
     val newCloseLine = new StringBuilder(closeIndent).append(closeSuffix)
     val newInnerLine = new StringBuilder(innerIndent)
 
@@ -475,18 +472,18 @@ object GlobalKeyHandler:
 
   private def wordBoundsForward(b: TextBuffer): (Int, Int) =
     val currentLine = b.getCurrentLine()
-    val len         = currentLine.length()
-    val start       = Math.max(0, Math.min(b.cursorX, len))
-    var end         = start
+    val len = currentLine.length()
+    val start = Math.max(0, Math.min(b.cursorX, len))
+    var end = start
     while end < len && Character.isLetterOrDigit(currentLine.charAt(end)) do end += 1
     while end < len && !Character.isLetterOrDigit(currentLine.charAt(end)) do end += 1
     (start, end)
 
   private def wordBoundsBackward(b: TextBuffer): (Int, Int) =
     val currentLine = b.getCurrentLine()
-    val len         = currentLine.length()
-    val end         = Math.max(0, Math.min(b.cursorX, len))
-    var start       = end
+    val len = currentLine.length()
+    val end = Math.max(0, Math.min(b.cursorX, len))
+    var start = end
     while start > 0 && !Character.isLetterOrDigit(currentLine.charAt(start - 1)) do start -= 1
     while start > 0 && Character.isLetterOrDigit(currentLine.charAt(start - 1)) do start -= 1
     (start, end)
@@ -514,8 +511,8 @@ object GlobalKeyHandler:
   private def deleteRangeAndYank(b: TextBuffer, start: Int, end: Int): Unit =
     b.pushUndoState()
     val line = b.getCurrentLine()
-    val s    = Math.max(0, Math.min(start, line.length()))
-    val e    = Math.max(s, Math.min(end, line.length()))
+    val s = Math.max(0, Math.min(start, line.length()))
+    val e = Math.max(s, Math.min(end, line.length()))
     yankToClipboard(line.substring(s, e))
     line.delete(s, e)
     b.gotoPosition(s, b.cursorY)
@@ -523,13 +520,13 @@ object GlobalKeyHandler:
   private def deleteRange(b: TextBuffer, start: Int, end: Int): Unit =
     b.pushUndoState()
     val line = b.getCurrentLine()
-    val s    = Math.max(0, Math.min(start, line.length()))
-    val e    = Math.max(s, Math.min(end, line.length()))
+    val s = Math.max(0, Math.min(start, line.length()))
+    val e = Math.max(s, Math.min(end, line.length()))
     line.delete(s, e)
     b.gotoPosition(s, b.cursorY)
 
   private def isEscapedAt(line: StringBuilder, index: Int): Boolean =
-    var i           = index - 1
+    var i = index - 1
     var backslashes = 0
     while i >= 0 && line.charAt(i) == '\\' do
       backslashes += 1
@@ -537,8 +534,8 @@ object GlobalKeyHandler:
     (backslashes % 2) == 1
 
   private def countUnescapedQuotesBeforeCursor(line: StringBuilder, cursorX: Int): Int =
-    val end   = Math.max(0, Math.min(cursorX, line.length()))
-    var i     = 0
+    val end = Math.max(0, Math.min(cursorX, line.length()))
+    var i = 0
     var count = 0
     while i < end do
       if line.charAt(i) == '"' && !isEscapedAt(line, i) then count += 1
@@ -548,8 +545,8 @@ object GlobalKeyHandler:
   private def autoPairHandled(b: TextBuffer, c: Char): Boolean =
     if b == null then return false
 
-    val line           = b.getCurrentLine()
-    val x              = Math.max(0, Math.min(b.cursorX, line.length()))
+    val line = b.getCurrentLine()
+    val x = Math.max(0, Math.min(b.cursorX, line.length()))
     val nextChar: Char = if x < line.length() then line.charAt(x) else 0.toChar
 
     def insertPair(open: Char, close: Char): Boolean =
@@ -562,9 +559,9 @@ object GlobalKeyHandler:
       true
 
     c match
-      case '('             => insertPair('(', ')')
-      case '{'             => insertPair('{', '}')
-      case '['             => insertPair('[', ']')
+      case '(' => insertPair('(', ')')
+      case '{' => insertPair('{', '}')
+      case '[' => insertPair('[', ']')
       case ')' | '}' | ']' =>
         if nextChar == c then
           b.moveCursorRight()
@@ -1111,8 +1108,8 @@ object GlobalKeyHandler:
 
     KeybindingTrie.nmap("#", wordSearchAction)
     KeybindingTrie.nmap("*", wordSearchAction)
-//    KeybindingTrie.nmap("SHIFT-#", wordSearchAction)
-//    KeybindingTrie.nmap("SHIFT-*", wordSearchAction)
+    //    KeybindingTrie.nmap("SHIFT-#", wordSearchAction)
+    //    KeybindingTrie.nmap("SHIFT-*", wordSearchAction)
 
     KeybindingTrie.nmap(
       "CTRL-u",
@@ -1252,10 +1249,10 @@ object GlobalKeyHandler:
       "c e",
       (_, b) => {
         if b != null then
-          val line  = b.getCurrentLine()
-          val len   = line.length()
+          val line = b.getCurrentLine()
+          val len = line.length()
           val start = Math.max(0, Math.min(b.cursorX, len))
-          var end   = start
+          var end = start
           while end < len && Character.isLetterOrDigit(line.charAt(end)) do end += 1
           deleteRangeAndYank(b, start, end)
           switchMode(INSERT)
@@ -1281,7 +1278,7 @@ object GlobalKeyHandler:
         else
           // show options in the floating window for selecting the denition
           (
-        )
+          )
       }
     )
 
@@ -1357,8 +1354,8 @@ object GlobalKeyHandler:
       "e",
       (w, b) => {
         val line = b.getCurrentLine()
-        val len  = line.length()
-        var i    = Math.max(0, Math.min(b.cursorX, len))
+        val len = line.length()
+        var i = Math.max(0, Math.min(b.cursorX, len))
         while i < len && !Character.isLetterOrDigit(line.charAt(i)) do i += 1
         while i < len && Character.isLetterOrDigit(line.charAt(i)) do i += 1
         val x = if i > 0 then i - 1 else 0
@@ -1472,7 +1469,7 @@ object GlobalKeyHandler:
               val insertText = selectedItem.insertText.getOrElse(selectedItem.getLabel())
               b.insertTextAtCursor(insertText)
             if selectedItem.getKind() == CompletionItemKind.Constructor || selectedItem
-                .getKind() == CompletionItemKind.Method
+              .getKind() == CompletionItemKind.Method
             then b.insertTextAtCursor("()")
         else b.smartNewLine()
       }
@@ -1525,23 +1522,23 @@ class GlobalKeyHandler extends IKeyHandler:
         val keyCode = SDLEventHelpers.getKeyCode(e)
         SDLEventHelpers.getKeyMod(e)
 
-        if keyCode == SDLK_ESCAPE then
+        if keyCode == K_ESCAPE then
           tw.close()
           lastKeyPressTime = System.currentTimeMillis()
           return
 
         val seq: String =
-          if keyCode == SDLK_RETURN then "\r"
-          else if keyCode == SDLK_TAB then "\t"
-          else if keyCode == SDLK_BACKSPACE then "\u007f"
-          else if keyCode == SDLK_UP then "\u001b[A"
-          else if keyCode == SDLK_DOWN then "\u001b[B"
-          else if keyCode == SDLK_RIGHT then "\u001b[C"
-          else if keyCode == SDLK_LEFT then "\u001b[D"
-          else if keyCode == SDLK_HOME then "\u001b[H"
-          else if keyCode == SDLK_END then "\u001b[F"
-          else if keyCode == SDLK_PAGEUP then "\u001b[5~"
-          else if keyCode == SDLK_PAGEDOWN then "\u001b[6~"
+          if keyCode == K_RETURN then "\r"
+          else if keyCode == K_TAB then "\t"
+          else if keyCode == K_BACKSPACE then "\u007f"
+          else if keyCode == K_UP then "\u001b[A"
+          else if keyCode == K_DOWN then "\u001b[B"
+          else if keyCode == K_RIGHT then "\u001b[C"
+          else if keyCode == K_LEFT then "\u001b[D"
+          else if keyCode == K_HOME then "\u001b[H"
+          else if keyCode == K_END then "\u001b[F"
+          else if keyCode == K_PAGEUP then "\u001b[5~"
+          else if keyCode == K_PAGEDOWN then "\u001b[6~"
           else ""
 
         if seq.nonEmpty then
@@ -1556,13 +1553,13 @@ class GlobalKeyHandler extends IKeyHandler:
       anyNode = KeybindingTrie.getRoot(TextInteractionMode.ANY)
       lastMode = mode
 
-    val keyCode  = SDLEventHelpers.getKeyCode(e)
-    val mod      = SDLEventHelpers.getKeyMod(e)
+    val keyCode = SDLEventHelpers.getKeyCode(e)
+    val mod = SDLEventHelpers.getKeyMod(e)
     val scancode = SDLEventHelpers.getKeyScancode(e)
 
     if isModifierScancode(scancode) then return
 
-    val keyChar    = SDLKeyboard.SDL_GetKeyFromScancode(scancode, mod, false).toChar
+    val keyChar = SDLKeyboard.SDL_GetKeyFromScancode(scancode, mod, false).toChar
     val keyPressed = getKey(mod.toShort, keyCode, keyChar)
 
     if (mode == NAVIGATION || mode == SELECT || mode == SELECT_LINE || mode == SELECT_BLOCK) &&
@@ -1572,7 +1569,7 @@ class GlobalKeyHandler extends IKeyHandler:
       return
 
     val nextModeNode = if modeNode == null then null else modeNode.search(keyPressed)
-    val nextAnyNode  = if anyNode == null then null else anyNode.search(keyPressed)
+    val nextAnyNode = if anyNode == null then null else anyNode.search(keyPressed)
 
     modeNode = nextModeNode
     anyNode = nextAnyNode
@@ -1588,8 +1585,8 @@ class GlobalKeyHandler extends IKeyHandler:
         else null
 
       if actionNode != null then
-        val repeatCount        = KeybindingTrie.getNumberInput()
-        val window             = WindowManager.getCurrentWindow
+        val repeatCount = KeybindingTrie.getNumberInput()
+        val window = WindowManager.getCurrentWindow
         var buffer: TextBuffer = null
         window.getComponent match
           case textComponent: TextComponent =>
@@ -1607,27 +1604,25 @@ class GlobalKeyHandler extends IKeyHandler:
     lastKeyPressTime = System.currentTimeMillis()
 
   def getKey(mod: Short, keyCode: Int, keyChar: Char): String =
-    if keyCode == SDLK_ESCAPE then "ESC"
-    else if keyCode == SDLK_RETURN then "RET"
-    else if keyCode == SDLK_SPACE then "SPACE"
-    else if keyCode == SDLK_BACKSPACE then "BACKSPACE"
-    else if keyCode == SDLK_TAB then "TAB"
-    else if keyCode == SDLK_DELETE then "DELETE"
-    else if (mod.toInt & SDL_KMOD_CTRL.toInt) != 0 then "CTRL-" + keyChar
-    else if (mod.toInt & SDL_KMOD_SHIFT.toInt) != 0 then
+    if keyCode == K_ESCAPE then "ESC"
+    else if keyCode == K_RETURN then "RET"
+    else if keyCode == K_SPACE then "SPACE"
+    else if keyCode == K_BACKSPACE then "BACKSPACE"
+    else if keyCode == K_TAB then "TAB"
+    else if keyCode == K_DELETE then "DELETE"
+    else if (mod.toInt & KMOD_CTRL.toInt) != 0 then "CTRL-" + keyChar
+    else if (mod.toInt & KMOD_SHIFT.toInt) != 0 then
       if Character.isUpperCase(keyChar) then String.valueOf(keyChar)
       else if !Character.isLetterOrDigit(keyChar) then String.valueOf(keyChar)
       else "SHIFT-" + keyChar
-    else if (mod.toInt & SDL_KMOD_ALT.toInt) != 0 then "ALT-" + keyChar
+    else if (mod.toInt & KMOD_ALT.toInt) != 0 then "ALT-" + keyChar
     else String.valueOf(keyChar)
 
   override def handleInput(event: Ptr[SDL_Event]): Unit =
     try {
       WindowManager.getCurrentWindow match
         case tw: TerminalWindow =>
-          val textInputCStr = SDLEventHelpers.getTextInput(event)
-          if textInputCStr == null then return
-          val textInput = fromCString(textInputCStr)
+          val textInput = SDLEventHelpers.getTextInput(event)
           if textInput == null || textInput.isEmpty then return
           tw.getTerminalComponent().onTextInput(textInput)
           return
@@ -1636,13 +1631,8 @@ class GlobalKeyHandler extends IKeyHandler:
       val mode = getBufferMode
       if mode == INSERT && WindowManager.getCurrentWindow.getComponent.isInstanceOf[TextComponent] then
         val textComponent = WindowManager.getCurrentWindow.getComponent.asInstanceOf[TextComponent]
-        val buffer        = textComponent.getBuffer
-        val textInputCStr = SDLEventHelpers.getTextInput(event)
-
-        if textInputCStr == null then return
-
-        val textInput = fromCString(textInputCStr)
-
+        val buffer = textComponent.getBuffer
+        val textInput = SDLEventHelpers.getTextInput(event)
         if textInput == null || textInput.isEmpty then return
 
         val c = textInput.charAt(0)
@@ -1661,24 +1651,24 @@ class GlobalKeyHandler extends IKeyHandler:
 
             val activeWindow = WindowManager.getCurrentWindow
             val anchorXIndex = Math.max(0, buffer.cursorX - 1)
-            val caretX       = caretXPxAt(buffer, anchorXIndex)
-            val unclampedX   = (activeWindow.x + (caretX - activeWindow.offsetX)).toInt
+            val caretX = caretXPxAt(buffer, anchorXIndex)
+            val unclampedX = (activeWindow.x + (caretX - activeWindow.offsetX)).toInt
             val windowY = activeWindow.y + ((buffer.cursorY - activeWindow.offsetY + 1) * FontManager.getLineHeight())
             val maxWindowHeight = (Engine.getHeight - FontManager.getLineHeight()) - windowY
-            val windowX         = Math.max(0.0f, unclampedX.toFloat)
+            val windowX = Math.max(0.0f, unclampedX.toFloat)
 
             client.requestCompletionAsync(
               buffer,
               suggestions => {
                 if (suggestions.nonEmpty) {
-                  val cmpWindow  = WindowManager.getAutoCompleteWindow
+                  val cmpWindow = WindowManager.getAutoCompleteWindow
                   val wasVisible = cmpWindow.isVisible
                   cmpWindow.setSuggestions(suggestions)
 
                   val preferredWidth = Math.min(cmpWindow.getPreferredWidth(), Engine.getWidth.toFloat)
-                  val baseX          = if wasVisible then cmpWindow.x else windowX
+                  val baseX = if wasVisible then cmpWindow.x else windowX
                   val availableWidth = Math.max(0.0f, Engine.getWidth.toFloat - baseX)
-                  val dynamicWidth   = Math.min(preferredWidth, availableWidth)
+                  val dynamicWidth = Math.min(preferredWidth, availableWidth)
 
                   val clampedX =
                     if wasVisible then cmpWindow.x
@@ -1695,25 +1685,20 @@ class GlobalKeyHandler extends IKeyHandler:
           }
         else WindowManager.getAutoCompleteWindow.hide()
       else if mode == COMMAND then
-        val textInputCStr = SDLEventHelpers.getTextInput(event)
-        if textInputCStr != null then
-          val textInput = fromCString(textInputCStr)
+        val textInput = SDLEventHelpers.getTextInput(event)
+        if textInput != null then
           if textInput != null && textInput.nonEmpty then appendCommandBuffer(textInput.charAt(0))
       else if mode == SEARCH then
         WindowManager.getCurrentWindow match
           case telescope: TelescopeWindow =>
-            val textInputCStr = SDLEventHelpers.getTextInput(event)
-            if textInputCStr == null then return
-            val textInput = fromCString(textInputCStr)
+            val textInput = SDLEventHelpers.getTextInput(event)
             if textInput == null || textInput.isEmpty then return
             telescope.onQueryChar(textInput.charAt(0))
           case _ =>
             if WindowManager.getCurrentWindow.getComponent.isInstanceOf[TextComponent] then
               val textComponent = WindowManager.getCurrentWindow.getComponent.asInstanceOf[TextComponent]
-              val buffer        = textComponent.getBuffer
-              val textInputCStr = SDLEventHelpers.getTextInput(event)
-              if textInputCStr == null then return
-              val textInput = fromCString(textInputCStr)
+              val buffer = textComponent.getBuffer
+              val textInput = SDLEventHelpers.getTextInput(event)
               if textInput == null || textInput.isEmpty then return
               buffer.appendSearchChar(textInput.charAt(0))
     } catch {

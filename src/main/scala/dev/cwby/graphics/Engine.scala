@@ -1,23 +1,25 @@
 package dev.cwby.graphics
 
 import dev.cwby.WindowManager
-import dev.cwby.bindings.GLConstants._
-import dev.cwby.bindings.SDL3._
+import dev.cwby.bindings.GLConstants.*
 import dev.cwby.bindings.gl
 import dev.cwby.clipboard.ClipboardType
 import dev.cwby.clipboard.setClipboardContent
 import dev.cwby.graphics.OpenGLRenderer
+import dev.cwby.guitk.bindings.sdl.{SDL, SDLClipboard, SDLEventHelpers, SDLEvents, SDLGL, SDLVideo, SDL_Event, SDL_Window}
+import dev.cwby.guitk.bindings.sdl.SDLConstants.*
 import dev.cwby.input.GlobalKeyHandler
 import dev.cwby.input.IKeyHandler
 import dev.cwby.lsp.LSPManager
 
 import scala.compiletime.uninitialized
-import scala.scalanative.unsafe._
+import scala.scalanative.unsafe.*
+import scala.scalanative.unsafe.Size.intToSize
 
 object Engine {
-  private var window: SDL_Window   = uninitialized
-  private var width: Int           = 1280
-  private var height: Int          = 720
+  private var window: SDL_Window = uninitialized
+  private var width: Int = 1280
+  private var height: Int = 720
   private var shouldClose: Boolean = false
 
   def getWidth: Int = width
@@ -35,18 +37,11 @@ class Engine {
   private val keyHandler: IKeyHandler = GlobalKeyHandler()
 
   inline def initSDL(): Unit = {
-    if (!SDLInit.SDL_Init(SDL_INIT_VIDEO)) {
+    if (!SDL.init(INIT_VIDEO)) {
       throw IllegalStateException("Unable to initialize SDL")
     }
 
-    Zone {
-      Engine.window = SDLVideo.SDL_CreateWindow(
-        toCString("ForgeBorn"),
-        Engine.width,
-        Engine.height,
-        SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE
-      )
-    }
+    Engine.window = SDLVideo.createWindow("ForgeBorn", Engine.width, Engine.height, WINDOW_OPENGL | WINDOW_BORDERLESS | WINDOW_RESIZABLE)
 
     if (Engine.window == null) {
       throw RuntimeException("Failed to create the SDL window")
@@ -56,7 +51,7 @@ class Engine {
     SDLGL.SDL_GL_MakeCurrent(Engine.window, context)
 
     val renderer = OpenGLRenderer()
-    val event    = stackalloc[SDL_Event](1)
+    val event = stackalloc[SDL_Event](1)
 
     while (!Engine.shouldClose) {
       // handle events
@@ -64,31 +59,26 @@ class Engine {
         val eventType = SDLEventHelpers.getEventType(event)
 
         eventType match {
-          case SDL_EVENT_WINDOW_CLOSE_REQUESTED | SDL_EVENT_QUIT =>
+          case EVENT_WINDOW_CLOSE_REQUESTED | EVENT_QUIT =>
             Engine.shouldClose = true
             LSPManager.closeAllLsp()
-          case SDL_EVENT_KEY_DOWN =>
+          case EVENT_KEY_DOWN =>
             keyHandler.handle(event)
-          case SDL_EVENT_TEXT_INPUT =>
+          case EVENT_TEXT_INPUT =>
             keyHandler.handleInput(event)
-          case SDL_EVENT_CLIPBOARD_UPDATE =>
+          case EVENT_CLIPBOARD_UPDATE =>
             val clipboardText = SDLClipboard.SDL_GetClipboardText()
-            if (clipboardText != null) {
-              setClipboardContent(ClipboardType.SYSTEM, fromCString(clipboardText))
+            if (clipboardText != "") {
+              setClipboardContent(ClipboardType.SYSTEM, clipboardText)
             }
-          case SDL_EVENT_WINDOW_RESIZED =>
-            val w = stackalloc[CInt](1)
-            val h = stackalloc[CInt](1)
-            SDLVideo.SDL_GetWindowSizeInPixels(Engine.window, w, h)
-            Engine.width = !w
-            Engine.height = !h
+          case EVENT_WINDOW_RESIZED =>
+            val (w, h) = SDLVideo.SDL_GetWindowSizeInPixels(Engine.window)
+            println(s"Window resized to $w x $h")
+            Engine.width = w
+            Engine.height = h
             renderer.onResize(Engine.width, Engine.height)
             WindowManager.resizeFloatingWindows(Engine.width, Engine.height)
-          case _ =>
-            // Handle TEXT_INPUT events if they occur
-            if (eventType == SDL_EVENT_TEXT_INPUT) {
-              keyHandler.handleInput(event)
-            }
+          case _ => ()
         }
       }
 
@@ -99,6 +89,6 @@ class Engine {
       SDLGL.SDL_GL_SwapWindow(Engine.window)
 
     }
-    SDLInit.SDL_Quit()
+    SDL.quit()
   }
 }
