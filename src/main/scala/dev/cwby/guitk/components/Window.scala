@@ -3,6 +3,7 @@ package dev.cwby.guitk.components
 import dev.cwby.editor.TextBuffer
 import dev.cwby.guitk.text.FontManager
 import dev.cwby.graphics.layout.component.IComponent
+import dev.cwby.guitk.events.{EventDispatcher, WindowOpenEvent, WindowCloseEvent}
 
 class Window(
     var title: String,
@@ -17,9 +18,14 @@ class Window(
     private var visibleLinesCache: Int = 0
 ):
 
-  def open(): Unit = {}
+  def open(): Unit = {
+    EventDispatcher.dispatch(WindowOpenEvent(this))
+  }
 
-  def close(): Unit = onClose()
+  def close(): Unit = {
+    EventDispatcher.dispatch(WindowCloseEvent(this))
+    onClose()
+  }
 
   def onTrigger(): Unit = {}
 

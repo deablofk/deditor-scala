@@ -9,6 +9,7 @@ import dev.cwby.guitk.bindings.sdl.SDLConstants.*
 import dev.cwby.guitk.renderer.{Renderer2D, OpenGLRenderer}
 import dev.cwby.editor.input.GlobalKeyHandler
 import dev.cwby.lsp.LSPManager
+import dev.cwby.guitk.events.EventLogger
 
 import scala.compiletime.uninitialized
 import scala.scalanative.unsafe.*
@@ -91,6 +92,7 @@ object Engine {
   }
 
   inline def run(): Unit = {
+    EventLogger.initialize()
     createWindow()
     val renderer = createRenderer()
     val event = stackalloc[SDL_Event](1)
