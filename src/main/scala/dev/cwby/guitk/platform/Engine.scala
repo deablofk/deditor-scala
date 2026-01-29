@@ -7,7 +7,7 @@ import dev.cwby.guitk.bindings.opengl.gl
 import dev.cwby.guitk.bindings.sdl.*
 import dev.cwby.guitk.bindings.sdl.SDLConstants.*
 import dev.cwby.guitk.renderer.{Renderer2D, OpenGLRenderer}
-import dev.cwby.input.GlobalKeyHandler
+import dev.cwby.editor.input.GlobalKeyHandler
 import dev.cwby.lsp.LSPManager
 
 import scala.compiletime.uninitialized
@@ -19,7 +19,7 @@ object Engine {
   private var height: Int = 720
   private var shouldClose: Boolean = false
 
-  private val keyHandler = GlobalKeyHandler()
+  private val keyHandler = GlobalKeyHandler
 
   inline def getWidth: Int = width
 

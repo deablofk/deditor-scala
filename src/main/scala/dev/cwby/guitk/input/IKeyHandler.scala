@@ -1,4 +1,4 @@
-package dev.cwby.input
+package dev.cwby.guitk.input
 
 import dev.cwby.guitk.bindings.sdl.SDL_Event
 import scala.scalanative.unsafe._

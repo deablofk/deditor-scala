@@ -1,4 +1,4 @@
-package dev.cwby.input
+package dev.cwby.guitk.input
 
 import dev.cwby.editor.TextBuffer
 import dev.cwby.editor.TextInteractionMode

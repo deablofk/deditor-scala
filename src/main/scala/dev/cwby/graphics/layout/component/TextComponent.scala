@@ -9,7 +9,7 @@ import dev.cwby.getConfig
 import dev.cwby.guitk.text.FontManager
 import dev.cwby.guitk.components.Window
 import dev.cwby.guitk.renderer.Renderer2D
-import dev.cwby.input.GlobalKeyHandler
+import dev.cwby.editor.input.GlobalKeyHandler
 import dev.cwby.treesitter.SyntaxHighlighter
 
 import scala.collection.mutable
