@@ -2,7 +2,7 @@ package dev.cwby.commands
 
 import dev.cwby.BufferManager
 import dev.cwby.WindowManager
-import dev.cwby.graphics.layout.TiledWindow
+import dev.cwby.guitk.components.TiledWindow
 import dev.cwby.graphics.layout.component.TextComponent
 
 @inline private def ensureComponent(tw: TiledWindow): TextComponent = {

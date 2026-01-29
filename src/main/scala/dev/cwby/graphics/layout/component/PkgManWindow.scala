@@ -2,7 +2,7 @@ package dev.cwby.graphics.layout.component
 
 import dev.cwby.BufferManager
 import dev.cwby.editor.TextBuffer
-import dev.cwby.graphics.layout.FloatingWindow
+import dev.cwby.guitk.components.FloatingWindow
 import dev.cwby.graphics.layout.component.TextComponent
 import dev.cwby.pkgs.PackageManager
 

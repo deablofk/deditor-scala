@@ -4,7 +4,7 @@ import dev.cwby.editor.TextBuffer
 import dev.cwby.executeCommand
 import dev.cwby.getFileExtension
 import dev.cwby.getProjectPath
-import dev.cwby.graphics.layout.FloatingWindow
+import dev.cwby.guitk.components.FloatingWindow
 
 import java.io.BufferedReader
 import java.io.File

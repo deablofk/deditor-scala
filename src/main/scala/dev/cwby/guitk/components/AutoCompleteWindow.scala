@@ -1,4 +1,4 @@
-package dev.cwby.graphics.layout
+package dev.cwby.guitk.components
 
 import dev.cwby.BufferManager
 import dev.cwby.editor.TextBuffer
@@ -19,7 +19,6 @@ class AutoCompleteWindow(x: Float, y: Float, width: Float, height: Float) extend
   buffer = this.getComponent.asInstanceOf[TextComponent].getBuffer
   this.visible = false
 
-  // TODO: set suggestions values must not set the window to automatically visible.
   def getPreferredWidth(): Float = {
     preferredWidth
   }

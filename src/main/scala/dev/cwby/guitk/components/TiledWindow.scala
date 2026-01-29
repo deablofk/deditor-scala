@@ -1,18 +1,14 @@
-package dev.cwby.graphics.layout
+package dev.cwby.guitk.components
 
 import dev.cwby.WindowManager
 import dev.cwby.graphics.Engine
 import dev.cwby.lsp.LSPManager
 
-/** Node Direction Constants
-  */
 final val DIRECTION_LEFT: Int  = 0
 final val DIRECTION_RIGHT: Int = 1
 final val DIRECTION_UP: Int    = 2
 final val DIRECTION_DOWN: Int  = 3
 
-/** Split Type Constants
-  */
 final val SPLIT_NONE: Int       = 0
 final val SPLIT_VERTICAL: Int   = 1
 final val SPLIT_HORIZONTAL: Int = 2
@@ -174,8 +170,6 @@ final class TiledWindow(
   override def onClose(): Unit = {
     val parent = this.father
 
-    // small helper for closing LSP
-    // TODO: make it event driven, so the lsp server listen and close for the specific window/buffer.
     if parent == null then
       LSPManager.closeAllLsp()
       Engine.requestClose()

@@ -3,10 +3,10 @@ package dev.cwby
 import dev.cwby.BufferManager
 import dev.cwby.graphics.Engine
 import dev.cwby.graphics.FontManager
-import dev.cwby.graphics.layout.AutoCompleteWindow
-import dev.cwby.graphics.layout.FloatingWindow
-import dev.cwby.graphics.layout.TiledWindow
-import dev.cwby.graphics.layout.Window
+import dev.cwby.guitk.components.AutoCompleteWindow
+import dev.cwby.guitk.components.FloatingWindow
+import dev.cwby.guitk.components.TiledWindow
+import dev.cwby.guitk.components.Window
 import dev.cwby.graphics.layout.component.TextComponent
 
 import scala.collection.mutable.ListBuffer

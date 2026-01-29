@@ -1,4 +1,4 @@
-package dev.cwby.graphics.layout
+package dev.cwby.guitk.components
 
 import dev.cwby.editor.TextBuffer
 import dev.cwby.graphics.FontManager
@@ -17,7 +17,6 @@ class Window(
     private var visibleLinesCache: Int = 0
 ):
 
-  // behavior (composition)
   def open(): Unit = {}
 
   def close(): Unit = onClose()

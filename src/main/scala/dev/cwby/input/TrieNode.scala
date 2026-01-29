@@ -1,7 +1,7 @@
 package dev.cwby.input
 
 import dev.cwby.editor.TextBuffer
-import dev.cwby.graphics.layout.Window
+import dev.cwby.guitk.components.Window
 
 import scala.collection.mutable
 import scala.compiletime.uninitialized

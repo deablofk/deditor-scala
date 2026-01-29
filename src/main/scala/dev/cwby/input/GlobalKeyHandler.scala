@@ -16,7 +16,7 @@ import dev.cwby.getCommandBuffer
 import dev.cwby.graphics.Engine
 import dev.cwby.graphics.FontManager
 import dev.cwby.guitk.renderer.OpenGLRenderer
-import dev.cwby.graphics.layout.TiledWindow
+import dev.cwby.guitk.components.TiledWindow
 import dev.cwby.graphics.layout.component.TelescopeComponent
 import dev.cwby.graphics.layout.component.TelescopeWindow
 import dev.cwby.graphics.layout.component.TextComponent
@@ -1100,7 +1100,7 @@ object GlobalKeyHandler:
         w.ensureCursorVisibleHorizontal(b)
       }
     )
-    val wordSearchAction: (dev.cwby.graphics.layout.Window, TextBuffer) => Unit = (w, b) => {
+    val wordSearchAction: (dev.cwby.guitk.components.Window, TextBuffer) => Unit = (w, b) => {
       if b != null && b.beginSearchForWordUnderCursor() then
         w.ensureCursorVisible(b)
         w.ensureCursorVisibleHorizontal(b)

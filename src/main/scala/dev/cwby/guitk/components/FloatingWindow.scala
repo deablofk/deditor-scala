@@ -1,21 +1,7 @@
-package dev.cwby.graphics.layout
+package dev.cwby.guitk.components
 
 import dev.cwby.WindowManager
-import dev.cwby.graphics.layout.Window
 
-/** Base class for transient overlay windows that float above the tiled layout.
-  *
-  * @param x
-  *   initial x coordinate
-  * @param y
-  *   initial y coordinate
-  * @param width
-  *   initial width
-  * @param height
-  *   initial height
-  * @param sizeFactor
-  *   fraction of the available viewport to occupy (0, 1]
-  */
 abstract class FloatingWindow(
     x: Float,
     y: Float,

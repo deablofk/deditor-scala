@@ -6,9 +6,9 @@ import dev.cwby.editor.TextInteractionMode
 import dev.cwby.getBufferMode
 import dev.cwby.getCommandBuffer
 import dev.cwby.getConfig
-import dev.cwby.graphics.layout.SPLIT_HORIZONTAL
-import dev.cwby.graphics.layout.SPLIT_VERTICAL
-import dev.cwby.graphics.layout.TiledWindow
+import dev.cwby.guitk.components.SPLIT_HORIZONTAL
+import dev.cwby.guitk.components.SPLIT_VERTICAL
+import dev.cwby.guitk.components.TiledWindow
 import dev.cwby.graphics.layout.component.TextComponent
 import dev.cwby.graphics.FontManager
 

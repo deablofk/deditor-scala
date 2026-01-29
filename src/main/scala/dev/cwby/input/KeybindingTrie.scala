@@ -2,7 +2,7 @@ package dev.cwby.input
 
 import dev.cwby.editor.TextBuffer
 import dev.cwby.editor.TextInteractionMode
-import dev.cwby.graphics.layout.Window
+import dev.cwby.guitk.components.Window
 
 import scala.collection.mutable
 
