@@ -1,7 +1,7 @@
 package dev.cwby.graphics.opengl
 
-import dev.cwby.bindings.GLConstants._
-import dev.cwby.bindings.gl._
+import dev.cwby.guitk.bindings.opengl.GLConstants._
+import dev.cwby.guitk.bindings.opengl.gl._
 
 import scala.scalanative.unsafe._
 

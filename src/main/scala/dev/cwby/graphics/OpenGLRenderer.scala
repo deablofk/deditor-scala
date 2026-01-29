@@ -25,16 +25,11 @@ object OpenGLRenderer {
   }
 }
 
-class OpenGLRenderer {
-  private var currentWidth: Int            = Engine.getWidth
-  private var currentHeight: Int           = Engine.getHeight
-  private val renderer: Renderer2D         = Renderer2D(currentWidth, currentHeight)
+class OpenGLRenderer(renderer: Renderer2D) {
   private val windowBorderColor: Int       = 0xff3a3a3a
   private val windowBorderThickness: Float = 2.0f
 
   def onResize(width: Int, height: Int): Unit = {
-    currentWidth = width
-    currentHeight = height
     renderer.updateProjection(width, height)
     val root = WindowManager.getRootNode
     if root != null then

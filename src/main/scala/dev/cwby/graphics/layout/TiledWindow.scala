@@ -178,7 +178,7 @@ final class TiledWindow(
     // TODO: make it event driven, so the lsp server listen and close for the specific window/buffer.
     if parent == null then
       LSPManager.closeAllLsp()
-      Engine.setShouldClose(true)
+      Engine.requestClose()
       return
 
     val sibling = if this == parent.leftChild then parent.rightChild else parent.leftChild

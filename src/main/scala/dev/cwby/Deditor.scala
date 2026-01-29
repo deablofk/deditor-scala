@@ -25,7 +25,6 @@ private val editorConfig = {
   TreeSitterGrammarManager.preinstallEnabled(cfg.treesitterParsers)
   cfg
 }
-private val engine              = Engine()
 private var MODE                = TextInteractionMode.NAVIGATION
 private var projectPath: String = System.getProperty("user.dir")
 
@@ -38,16 +37,13 @@ inline def getBufferMode: TextInteractionMode =
 inline def getConfig: EditorConfig =
   editorConfig
 
-inline def getEngine: Engine =
-  engine
-
 inline def getProjectPath: String =
   projectPath
 
 object Deditor {
 
   def main(args: Array[String]): Unit = {
-    engine.initSDL();
+    Engine.run()
   }
 
 }

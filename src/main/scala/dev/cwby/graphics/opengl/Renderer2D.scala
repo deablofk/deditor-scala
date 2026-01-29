@@ -1,8 +1,7 @@
 package dev.cwby.graphics.opengl
 
-import dev.cwby.bindings.GLConstants._
-import dev.cwby.bindings.GLHelpers
-import dev.cwby.bindings.gl
+import dev.cwby.guitk.bindings.opengl.GLConstants._
+import dev.cwby.guitk.bindings.opengl.{GLHelpers, gl}
 
 import scala.collection.mutable.Stack
 import scala.compiletime.uninitialized

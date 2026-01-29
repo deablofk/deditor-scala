@@ -1,42 +1,42 @@
-package dev.cwby.bindings
+package dev.cwby.guitk.bindings.opengl
 
-import scala.scalanative.unsafe._
+import scala.scalanative.unsafe.*
 
 object GLConstants {
-  val GL_VENDOR: CInt              = 0x1f00
-  val GL_RENDERER: CInt            = 0x1f01
-  val GL_VERSION: CInt             = 0x1f02
-  val GL_DEPTH_TEST: CInt          = 0x0b71
-  val GL_COLOR_BUFFER_BIT: CInt    = 0x00004000
-  val GL_DEPTH_BUFFER_BIT: CInt    = 0x00000100
-  val GL_TEXTURE_2D: CInt          = 0x0de1
-  val GL_TEXTURE_WRAP_S: CInt      = 0x2802
-  val GL_TEXTURE_WRAP_T: CInt      = 0x2803
-  val GL_TEXTURE_MIN_FILTER: CInt  = 0x2801
-  val GL_TEXTURE_MAG_FILTER: CInt  = 0x2800
-  val GL_CLAMP_TO_EDGE: CInt       = 0x812f
-  val GL_NEAREST: CInt             = 0x2600
-  val GL_LINEAR: CInt              = 0x2601
-  val GL_RED: CInt                 = 0x1903
-  val GL_RGBA: CInt                = 0x1908
-  val GL_UNSIGNED_BYTE: CInt       = 0x1401
-  val GL_BLEND: CInt               = 0x0be2
-  val GL_SRC_ALPHA: CInt           = 0x0302
-  val GL_ONE_MINUS_SRC_ALPHA: CInt = 0x0303
-  val GL_ARRAY_BUFFER: CInt        = 0x8892
-  val GL_DYNAMIC_DRAW: CInt        = 0x88e8
-  val GL_FLOAT: CInt               = 0x1406
-  val GL_VERTEX_SHADER: CInt       = 0x8b31
-  val GL_FRAGMENT_SHADER: CInt     = 0x8b30
-  val GL_COMPILE_STATUS: CInt      = 0x8b81
-  val GL_LINK_STATUS: CInt         = 0x8b82
-  val GL_VALIDATE_STATUS: CInt     = 0x8b83
-  val GL_INFO_LOG_LENGTH: CInt     = 0x8b84
-  val GL_TRIANGLES: CInt           = 0x0004
-  val GL_SCISSOR_TEST: CInt        = 0x0c11
-  val GL_UNPACK_ALIGNMENT: CInt    = 0x0cf5
-  val GL_FALSE: CInt               = 0
-  val GL_TRUE: CInt                = 1
+  inline val GL_VENDOR              = 0x1f00
+  inline val GL_RENDERER            = 0x1f01
+  inline val GL_VERSION             = 0x1f02
+  inline val GL_DEPTH_TEST          = 0x0b71
+  inline val GL_COLOR_BUFFER_BIT    = 0x00004000
+  inline val GL_DEPTH_BUFFER_BIT    = 0x00000100
+  inline val GL_TEXTURE_2D          = 0x0de1
+  inline val GL_TEXTURE_WRAP_S      = 0x2802
+  inline val GL_TEXTURE_WRAP_T      = 0x2803
+  inline val GL_TEXTURE_MIN_FILTER  = 0x2801
+  inline val GL_TEXTURE_MAG_FILTER  = 0x2800
+  inline val GL_CLAMP_TO_EDGE       = 0x812f
+  inline val GL_NEAREST             = 0x2600
+  inline val GL_LINEAR              = 0x2601
+  inline val GL_RED                 = 0x1903
+  inline val GL_RGBA                = 0x1908
+  inline val GL_UNSIGNED_BYTE       = 0x1401
+  inline val GL_BLEND               = 0x0be2
+  inline val GL_SRC_ALPHA           = 0x0302
+  inline val GL_ONE_MINUS_SRC_ALPHA = 0x0303
+  inline val GL_ARRAY_BUFFER        = 0x8892
+  inline val GL_DYNAMIC_DRAW        = 0x88e8
+  inline val GL_FLOAT               = 0x1406
+  inline val GL_VERTEX_SHADER       = 0x8b31
+  inline val GL_FRAGMENT_SHADER     = 0x8b30
+  inline val GL_COMPILE_STATUS      = 0x8b81
+  inline val GL_LINK_STATUS         = 0x8b82
+  inline val GL_VALIDATE_STATUS     = 0x8b83
+  inline val GL_INFO_LOG_LENGTH     = 0x8b84
+  inline val GL_TRIANGLES           = 0x0004
+  inline val GL_SCISSOR_TEST        = 0x0c11
+  inline val GL_UNPACK_ALIGNMENT    = 0x0cf5
+  inline val GL_FALSE               = 0
+  inline val GL_TRUE                = 1
 }
 
 @extern
