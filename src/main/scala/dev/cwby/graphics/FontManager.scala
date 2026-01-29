@@ -2,16 +2,16 @@ package dev.cwby.graphics
 
 import dev.cwby.config.FontConfig
 import dev.cwby.getConfig
-import dev.cwby.graphics.opengl.GLFont
+import dev.cwby.guitk.text.{Font, TextShaper}
 
 import java.io.File
 import java.io.IOException
 
 object FontManager {
-  private val fontCfg: FontConfig = getConfig.font
-  private var defaultFont: GLFont = _
-  private var lineHeight: Float   = _
-  private var avgWidth: Float     = _
+  private val fontCfg: FontConfig     = getConfig.font
+  private var defaultFont: TextShaper = _
+  private var lineHeight: Float       = _
+  private var avgWidth: Float         = _
 
   try {
     initializeFont()
@@ -24,8 +24,8 @@ object FontManager {
   private def initializeFont(): Unit = {
     // Try to load the configured font, fallback to system fonts
     val fontPath      = findFontPath(fontCfg.family)
-    val fallbackFonts = GLFont.findSystemFallbackFonts()
-    defaultFont = new GLFont(fontPath, fontCfg.size, fallbackFonts)
+    val fallbackFonts = Font.findSystemFallbackFonts()
+    defaultFont = new TextShaper(fontPath, fontCfg.size, fallbackFonts)
     lineHeight = defaultFont.getLineHeight()
     avgWidth = defaultFont.measureText("M") // Use 'M' as average width reference
   }
@@ -57,7 +57,7 @@ object FontManager {
     avgWidth
   }
 
-  def getDefaultFont(): GLFont = {
+  def getDefaultFont(): TextShaper = {
     defaultFont
   }
 

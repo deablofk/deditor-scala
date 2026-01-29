@@ -1,68 +1,73 @@
 package dev.cwby.guitk.bindings.sdl
 
-import dev.cwby.guitk.bindings.sdl.internal.{SDLClipboardRaw, SDLEventHelpersRaw, SDLEventsRaw, SDLGLRaw, SDLInitRaw, SDLKeyboardRaw, SDLStdlib, SDLVideoRaw}
+import dev.cwby.guitk.bindings.sdl.internal.{
+  SDLClipboardRaw,
+  SDLEventHelpersRaw,
+  SDLEventsRaw,
+  SDLGLRaw,
+  SDLInitRaw,
+  SDLKeyboardRaw,
+  SDLStdlib,
+  SDLVideoRaw
+}
 
 import scala.scalanative.unsafe.*
 import scala.scalanative.unsigned.*
 
 object SDLConstants {
-  /**
-   * Window Flags
-   */
-  inline val INIT_VIDEO = 0x00000020
-  inline val WINDOW_OPENGL = 0x00000002
+
+  /** Window Flags
+    */
+  inline val INIT_VIDEO        = 0x00000020
+  inline val WINDOW_OPENGL     = 0x00000002
   inline val WINDOW_BORDERLESS = 0x00000010
-  inline val WINDOW_RESIZABLE = 0x00000020
+  inline val WINDOW_RESIZABLE  = 0x00000020
 
-  /**
-   * Event Types
-   */
-  inline val EVENT_QUIT = 0x100
+  /** Event Types
+    */
+  inline val EVENT_QUIT                   = 0x100
   inline val EVENT_WINDOW_CLOSE_REQUESTED = 0x203
-  inline val EVENT_WINDOW_RESIZED = 0x205
-  inline val EVENT_KEY_DOWN = 0x300
-  inline val EVENT_KEY_UP = 0x301
-  inline val EVENT_TEXT_EDITING = 0x302
-  inline val EVENT_TEXT_INPUT = 0x303
-  inline val EVENT_CLIPBOARD_UPDATE = 0x900
+  inline val EVENT_WINDOW_RESIZED         = 0x205
+  inline val EVENT_KEY_DOWN               = 0x300
+  inline val EVENT_KEY_UP                 = 0x301
+  inline val EVENT_TEXT_EDITING           = 0x302
+  inline val EVENT_TEXT_INPUT             = 0x303
+  inline val EVENT_CLIPBOARD_UPDATE       = 0x900
 
-  /**
-   * KEYS
-   */
-  inline val K_ESCAPE = 27
-  inline val K_RETURN = 13
+  /** KEYS
+    */
+  inline val K_ESCAPE    = 27
+  inline val K_RETURN    = 13
   inline val K_BACKSPACE = 8
-  inline val K_TAB = 9
-  inline val K_SPACE = 32
-  inline val K_DELETE = 127
-  inline val K_UP = 1073741906
-  inline val K_DOWN = 1073741905
-  inline val K_LEFT = 1073741904
-  inline val K_RIGHT = 1073741903
-  inline val K_HOME = 1073741898
-  inline val K_END = 1073741901
-  inline val K_PAGEUP = 1073741899
-  inline val K_PAGEDOWN = 1073741902
+  inline val K_TAB       = 9
+  inline val K_SPACE     = 32
+  inline val K_DELETE    = 127
+  inline val K_UP        = 1073741906
+  inline val K_DOWN      = 1073741905
+  inline val K_LEFT      = 1073741904
+  inline val K_RIGHT     = 1073741903
+  inline val K_HOME      = 1073741898
+  inline val K_END       = 1073741901
+  inline val K_PAGEUP    = 1073741899
+  inline val K_PAGEDOWN  = 1073741902
 
-  /**
-   * KEY MODIFIERS
-   */
-  inline val KMOD_NONE = 0x0000
+  /** KEY MODIFIERS
+    */
+  inline val KMOD_NONE   = 0x0000
   inline val KMOD_LSHIFT = 0x0001
   inline val KMOD_RSHIFT = 0x0002
-  inline val KMOD_SHIFT = KMOD_LSHIFT | KMOD_RSHIFT
-  inline val KMOD_LCTRL = 0x0040
-  inline val KMOD_RCTRL = 0x0080
-  inline val KMOD_CTRL = KMOD_LCTRL | KMOD_RCTRL
-  inline val KMOD_LALT = 0x0100
-  inline val KMOD_RALT = 0x0200
-  inline val KMOD_ALT = KMOD_LALT | KMOD_RALT
+  inline val KMOD_SHIFT  = KMOD_LSHIFT | KMOD_RSHIFT
+  inline val KMOD_LCTRL  = 0x0040
+  inline val KMOD_RCTRL  = 0x0080
+  inline val KMOD_CTRL   = KMOD_LCTRL | KMOD_RCTRL
+  inline val KMOD_LALT   = 0x0100
+  inline val KMOD_RALT   = 0x0200
+  inline val KMOD_ALT    = KMOD_LALT | KMOD_RALT
 }
 
-type SDL_Window = Ptr[Byte]
+type SDL_Window    = Ptr[Byte]
 type SDL_GLContext = Ptr[Byte]
-type SDL_Event = CArray[Byte, Nat.Digit3[Nat._1, Nat._2, Nat._8]] // SDL3 event size is 128 bytes
-
+type SDL_Event     = CArray[Byte, Nat.Digit3[Nat._1, Nat._2, Nat._8]] // SDL3 event size is 128 bytes
 
 object SDL {
   def init(flags: Int): Boolean = {
@@ -73,7 +78,6 @@ object SDL {
     SDLInitRaw.SDL_Quit()
   }
 }
-
 
 object SDLVideo {
   def createWindow(title: String, width: Int, height: Int, flags: Int): SDL_Window = {
@@ -90,8 +94,7 @@ object SDLVideo {
   def SDL_GetWindowSizeInPixels(window: SDL_Window): (Int, Int) = {
     val w, h = stackalloc[CInt](1)
 
-    if !SDLVideoRaw.SDL_GetWindowSizeInPixels(window, w, h) then
-      throw new RuntimeException("Failed to get window size")
+    if !SDLVideoRaw.SDL_GetWindowSizeInPixels(window, w, h) then throw new RuntimeException("Failed to get window size")
 
     (!w, !h)
   }
@@ -134,7 +137,6 @@ object SDLEvents {
   }
 }
 
-
 object SDLClipboard {
   def SDL_GetClipboardText(): String = {
     val cstr = SDLClipboardRaw.SDL_GetClipboardText()
@@ -171,7 +173,6 @@ object SDLKeyboard {
   }
 }
 
-
 object SDLEventHelpers {
 
   def getEventType(event: Ptr[SDL_Event]): UInt = {
@@ -206,4 +207,3 @@ object SDLEventHelpers {
     fromCString(SDLEventHelpersRaw.getTextInput(event))
   }
 }
-

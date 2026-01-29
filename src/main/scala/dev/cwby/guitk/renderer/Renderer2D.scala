@@ -1,6 +1,6 @@
 package dev.cwby.guitk.renderer
 
-import dev.cwby.graphics.opengl.GLFont
+import dev.cwby.guitk.text.TextShaper
 import dev.cwby.guitk.bindings.opengl.GLConstants._
 import dev.cwby.guitk.bindings.opengl.{GLHelpers, gl}
 
@@ -245,7 +245,7 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
     )
   }
 
-  def beginTextBatch(font: GLFont): Unit = {
+  def beginTextBatch(font: TextShaper): Unit = {
     if (isTextMode) return
 
     flush()
@@ -257,7 +257,7 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
     font.getTexture().bind()
   }
 
-  def endTextBatch(font: GLFont): Unit = {
+  def endTextBatch(font: TextShaper): Unit = {
     if (!isTextMode && !isColorTextMode) return
 
     flush()
@@ -275,7 +275,7 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
     rectShader.setUniformMatrix4("projection", projectionMatrix)
   }
 
-  private def switchToColorText(font: GLFont): Unit = {
+  private def switchToColorText(font: TextShaper): Unit = {
     if (isColorTextMode) return
 
     flush()
@@ -292,7 +292,7 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
     font.getColorTexture().bind()
   }
 
-  private def switchToGrayscaleText(font: GLFont): Unit = {
+  private def switchToGrayscaleText(font: TextShaper): Unit = {
     if (isTextMode) return
 
     flush()
@@ -309,7 +309,7 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
     font.getTexture().bind()
   }
 
-  def drawText(text: String, x: Float, y: Float, font: GLFont, color: Int): Unit = {
+  def drawText(text: String, x: Float, y: Float, font: TextShaper, color: Int): Unit = {
     if (text == null || text.isEmpty) {
       return
     }

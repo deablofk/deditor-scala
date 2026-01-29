@@ -1,18 +1,17 @@
 package dev.cwby.guitk.bindings.sdl.internal
 
-
 import scala.scalanative.unsafe.*
 import scala.scalanative.unsigned.*
 
 private[sdl] object SDLEventOffsets {
-  inline val TYPE = 0
+  inline val TYPE      = 0
   inline val TIMESTAMP = 8
   inline val WINDOW_D1 = 20
   inline val WINDOW_D2 = 24
-  inline val KEYCODE = 28
-  inline val KEYMOD = 32
-  inline val SCANCODE = 24
-  inline val TEXTPTR = 24
+  inline val KEYCODE   = 28
+  inline val KEYMOD    = 32
+  inline val SCANCODE  = 24
+  inline val TEXTPTR   = 24
 }
 
 @link("SDL3")
@@ -89,7 +88,6 @@ private[sdl] object SDLKeyboardRaw {
   def SDL_GetKeyFromScancode(scancode: CInt, modstate: UShort, key_event: Boolean): CInt = extern
 }
 
-
 private[sdl] object SDLEventHelpersRaw {
 
   private def readAt[T: Tag](base: Ptr[CArray[Byte, Nat.Digit3[Nat._1, Nat._2, Nat._8]]], offset: Int): T = {
@@ -127,10 +125,7 @@ private[sdl] object SDLEventHelpersRaw {
   def getTextInput(event: Ptr[CArray[Byte, Nat.Digit3[Nat._1, Nat._2, Nat._8]]]): CString = {
     val ptr = readAt[Ptr[Byte]](event, SDLEventOffsets.TEXTPTR)
 
-    if ptr == null then
-      null.asInstanceOf[CString]
-    else
-      ptr.asInstanceOf[CString]
+    if ptr == null then null.asInstanceOf[CString]
+    else ptr.asInstanceOf[CString]
   }
 }
-
