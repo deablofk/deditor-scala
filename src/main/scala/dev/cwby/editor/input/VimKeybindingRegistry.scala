@@ -22,9 +22,6 @@ import dev.cwby.lsp.LSPManager
 import dev.cwby.setBufferMode
 
 object VimKeybindingRegistry {
-  var startVisualX: Int = 0
-  var startVisualY: Int = 0
-
   def registerAllKeybindings(
     switchMode: TextInteractionMode => Unit,
     yankToClipboard: String => Unit,
@@ -238,8 +235,8 @@ object VimKeybindingRegistry {
     KeybindingTrie.nmap(
       "v",
       (_, b) => {
-        startVisualX = b.cursorX
-        startVisualY = b.cursorY
+        GlobalKeyHandler.startVisualX = b.cursorX
+        GlobalKeyHandler.startVisualY = b.cursorY
         switchMode(SELECT)
       }
     )
@@ -882,7 +879,7 @@ object VimKeybindingRegistry {
     KeybindingTrie.smap(
       "y",
       (_, b) => {
-        val region = b.getRegion(startVisualX, startVisualY, b.cursorX, b.cursorY)
+        val region = b.getRegion(GlobalKeyHandler.startVisualX, GlobalKeyHandler.startVisualY, b.cursorX, b.cursorY)
         setClipboardContent(ClipboardType.INTERNAL, stripTrailingPositionLine(region))
         switchMode(NAVIGATION)
       }
@@ -890,9 +887,9 @@ object VimKeybindingRegistry {
     KeybindingTrie.smap(
       "d",
       (_, b) => {
-        val region = b.getRegion(startVisualX, startVisualY, b.cursorX, b.cursorY)
+        val region = b.getRegion(GlobalKeyHandler.startVisualX, GlobalKeyHandler.startVisualY, b.cursorX, b.cursorY)
         setClipboardContent(ClipboardType.INTERNAL, stripTrailingPositionLine(region))
-        b.deleteRegion(startVisualX, startVisualY, b.cursorX, b.cursorY)
+        b.deleteRegion(GlobalKeyHandler.startVisualX, GlobalKeyHandler.startVisualY, b.cursorX, b.cursorY)
         switchMode(NAVIGATION)
       }
     )
