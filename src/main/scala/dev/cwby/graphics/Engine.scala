@@ -6,7 +6,7 @@ import dev.cwby.guitk.bindings.opengl.GLConstants.*
 import dev.cwby.guitk.bindings.opengl.gl
 import dev.cwby.guitk.bindings.sdl.*
 import dev.cwby.guitk.bindings.sdl.SDLConstants.*
-import dev.cwby.graphics.opengl.Renderer2D
+import dev.cwby.guitk.renderer.{Renderer2D, OpenGLRenderer}
 import dev.cwby.input.GlobalKeyHandler
 import dev.cwby.lsp.LSPManager
 

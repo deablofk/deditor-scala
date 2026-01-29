@@ -1,5 +1,7 @@
 package dev.cwby.graphics.opengl
 
+import dev.cwby.guitk.renderer.Texture
+
 import scala.scalanative.libc.stdlib._
 import scala.scalanative.libc.string._
 import scala.scalanative.unsafe._

@@ -8,7 +8,7 @@ import dev.cwby.getBufferMode
 import dev.cwby.getConfig
 import dev.cwby.graphics.FontManager
 import dev.cwby.graphics.layout.Window
-import dev.cwby.graphics.opengl.Renderer2D
+import dev.cwby.guitk.renderer.Renderer2D
 import dev.cwby.input.GlobalKeyHandler
 import dev.cwby.treesitter.SyntaxHighlighter
 

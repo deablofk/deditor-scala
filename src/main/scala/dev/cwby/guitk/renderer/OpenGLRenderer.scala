@@ -1,4 +1,4 @@
-package dev.cwby.graphics
+package dev.cwby.guitk.renderer
 
 import dev.cwby.WindowManager
 import dev.cwby.editor.TextBuffer
@@ -10,7 +10,7 @@ import dev.cwby.graphics.layout.SPLIT_HORIZONTAL
 import dev.cwby.graphics.layout.SPLIT_VERTICAL
 import dev.cwby.graphics.layout.TiledWindow
 import dev.cwby.graphics.layout.component.TextComponent
-import dev.cwby.graphics.opengl.Renderer2D
+import dev.cwby.graphics.FontManager
 
 object OpenGLRenderer {
   def getCurrentTextBuffer(): TextBuffer = {
@@ -39,7 +39,7 @@ class OpenGLRenderer(renderer: Renderer2D) {
 
   def renderStatusLine(x: Float, y: Float, width: Float, height: Float): Unit = {
     renderer.pushClip(x, y, width, height)
-    renderer.drawRect(x, y, width, height, 0xff000000) // Black background
+    renderer.drawRect(x, y, width, height, 0xff000000)
 
     val buffer =
       try OpenGLRenderer.getCurrentTextBuffer()
@@ -67,10 +67,9 @@ class OpenGLRenderer(renderer: Renderer2D) {
   }
 
   def render(width: Int, height: Int): Unit = {
-    renderer.clear(0xff1b1b1b) // Match theme background
+    renderer.clear(0xff1b1b1b)
     renderer.startFrame()
 
-    // Ensure layout reflects latest surface size even if resize events are missed
     val root = WindowManager.getRootNode
     if root != null then
       val usableHeight = height - FontManager.getLineHeight()
@@ -83,7 +82,6 @@ class OpenGLRenderer(renderer: Renderer2D) {
 
     renderer.endFrame()
 
-    // Flush pending font texture updates after frame completes to avoid blinks
     FontManager.getDefaultFont().flushPendingUpdates()
   }
 
@@ -101,7 +99,6 @@ class OpenGLRenderer(renderer: Renderer2D) {
       renderTiledWindows(node.leftChild)
       renderTiledWindows(node.rightChild)
 
-      // Draw a single shared border along the split (on top of children) to avoid duplicates
       if (node.splitType == SPLIT_VERTICAL) {
         val splitX = node.leftChild.x + node.leftChild.width - (windowBorderThickness / 2.0f)
         renderer.drawRect(splitX, node.y, windowBorderThickness, node.height, windowBorderColor)
@@ -142,23 +139,22 @@ class OpenGLRenderer(renderer: Renderer2D) {
         }
         window.component.render(renderer, window.x, window.y, window.width, window.height)
 
-        // Draw border around the floating window (all sides)
-        renderer.drawRect(window.x, window.y, window.width, windowBorderThickness, windowBorderColor) // top
+        renderer.drawRect(window.x, window.y, window.width, windowBorderThickness, windowBorderColor)
         renderer.drawRect(
           window.x,
           window.y + window.height - windowBorderThickness,
           window.width,
           windowBorderThickness,
           windowBorderColor
-        )                                                                                              // bottom
-        renderer.drawRect(window.x, window.y, windowBorderThickness, window.height, windowBorderColor) // left
+        )
+        renderer.drawRect(window.x, window.y, windowBorderThickness, window.height, windowBorderColor)
         renderer.drawRect(
           window.x + window.width - windowBorderThickness,
           window.y,
           windowBorderThickness,
           window.height,
           windowBorderColor
-        ) // right
+        )
       }
     }
   }

@@ -15,7 +15,7 @@ import dev.cwby.getBufferMode
 import dev.cwby.getCommandBuffer
 import dev.cwby.graphics.Engine
 import dev.cwby.graphics.FontManager
-import dev.cwby.graphics.OpenGLRenderer
+import dev.cwby.guitk.renderer.OpenGLRenderer
 import dev.cwby.graphics.layout.TiledWindow
 import dev.cwby.graphics.layout.component.TelescopeComponent
 import dev.cwby.graphics.layout.component.TelescopeWindow

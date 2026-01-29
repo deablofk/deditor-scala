@@ -2,7 +2,7 @@ package dev.cwby.terminal
 
 import dev.cwby.graphics.FontManager
 import dev.cwby.graphics.layout.component.IComponent
-import dev.cwby.graphics.opengl.Renderer2D
+import dev.cwby.guitk.renderer.Renderer2D
 
 import scala.scalanative.unsafe._
 

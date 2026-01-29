@@ -1,5 +1,6 @@
-package dev.cwby.graphics.opengl
+package dev.cwby.guitk.renderer
 
+import dev.cwby.graphics.opengl.GLFont
 import dev.cwby.guitk.bindings.opengl.GLConstants._
 import dev.cwby.guitk.bindings.opengl.{GLHelpers, gl}
 
@@ -39,7 +40,6 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
   initializeBuffers()
   updateProjection(screenWidth, screenHeight)
 
-  // Enable blending for transparency
   gl.glEnable(GL_BLEND)
   gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
@@ -129,7 +129,6 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
   }
 
   private def initializeBuffers(): Unit = {
-    // Create VAO and VBO
     vao = GLHelpers.glGenVertexArrays()
     vbo = GLHelpers.glGenBuffers()
 
@@ -137,15 +136,12 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
     gl.glBindBuffer(GL_ARRAY_BUFFER, vbo)
     gl.glBufferData(GL_ARRAY_BUFFER, (MAX_BATCH_SIZE * VERTEX_SIZE * 4), null, GL_DYNAMIC_DRAW)
 
-    // Position attribute
     gl.glVertexAttribPointer(0, 3, GL_FLOAT, false, VERTEX_SIZE * 4, 0)
     gl.glEnableVertexAttribArray(0)
 
-    // Color attribute
     gl.glVertexAttribPointer(1, 4, GL_FLOAT, false, VERTEX_SIZE * 4, 3 * 4)
     gl.glEnableVertexAttribArray(1)
 
-    // Texture coordinate attribute
     gl.glVertexAttribPointer(2, 2, GL_FLOAT, false, VERTEX_SIZE * 4, 7 * 4)
     gl.glEnableVertexAttribArray(2)
 
@@ -158,10 +154,8 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
   }
 
   def updateProjection(width: Int, height: Int): Unit = {
-    // Update OpenGL viewport
     gl.glViewport(0, 0, width, height)
 
-    // Orthographic projection matrix (top-left origin)
     projectionMatrix = new Array[Float](16)
     projectionMatrix(0) = 2.0f / width
     projectionMatrix(5) = -2.0f / height
@@ -211,13 +205,9 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
   def drawRect(x: Float, y: Float, width: Float, height: Float, color: Int, outline: Boolean): Unit =
     if (outline) {
       val lineWidth = 5.0f
-      // Top
       drawFilledRect(x, y, width, lineWidth, color)
-      // Bottom
       drawFilledRect(x, y + height - lineWidth, width, lineWidth, color)
-      // Left
       drawFilledRect(x, y, lineWidth, height, color)
-      // Right
       drawFilledRect(x + width - lineWidth, y, lineWidth, height, color)
     } else {
       drawFilledRect(x, y, width, height, color)
@@ -231,12 +221,10 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
     val b = (color & 0xff) / 255.0f
     val a = ((color >> 24) & 0xff) / 255.0f
 
-    // Triangle 1
     addVertex(x, y, 0, r, g, b, a, 0, 0)
     addVertex(x + width, y, 0, r, g, b, a, 1, 0)
     addVertex(x, y + height, 0, r, g, b, a, 0, 1)
 
-    // Triangle 2
     addVertex(x + width, y, 0, r, g, b, a, 1, 0)
     addVertex(x + width, y + height, 0, r, g, b, a, 1, 1)
     addVertex(x, y + height, 0, r, g, b, a, 0, 1)
@@ -350,12 +338,10 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
 
         checkFlush()
 
-        // Triangle 1
         addVertex(x0, y0, 0, r, g, b, a, charInfo.s0, charInfo.t0)
         addVertex(x1, y0, 0, r, g, b, a, charInfo.s1, charInfo.t0)
         addVertex(x0, y1, 0, r, g, b, a, charInfo.s0, charInfo.t1)
 
-        // Triangle 2
         addVertex(x1, y0, 0, r, g, b, a, charInfo.s1, charInfo.t0)
         addVertex(x1, y1, 0, r, g, b, a, charInfo.s1, charInfo.t1)
         addVertex(x0, y1, 0, r, g, b, a, charInfo.s0, charInfo.t1)
@@ -413,7 +399,6 @@ class Renderer2D(screenWidth: Int, screenHeight: Int) {
     if (!clipStack.isEmpty) {
       val clip = clipStack.top
       gl.glEnable(GL_SCISSOR_TEST)
-      // Convert from top-left origin to bottom-left origin for OpenGL
       val screenHeight = (2.0f / -projectionMatrix(5)).toInt
       gl.glScissor(clip.x.toInt, screenHeight - (clip.y + clip.height).toInt, clip.width.toInt, clip.height.toInt)
     }

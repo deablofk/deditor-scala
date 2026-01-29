@@ -2,7 +2,7 @@ package dev.cwby.graphics.layout.component
 
 import dev.cwby.editor.TextBuffer
 import dev.cwby.graphics.layout.Window
-import dev.cwby.graphics.opengl.Renderer2D
+import dev.cwby.guitk.renderer.Renderer2D
 
 import scala.compiletime.uninitialized
 

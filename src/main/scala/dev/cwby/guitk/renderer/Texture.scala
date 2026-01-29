@@ -1,4 +1,4 @@
-package dev.cwby.graphics.opengl
+package dev.cwby.guitk.renderer
 
 import dev.cwby.guitk.bindings.opengl.GLConstants._
 import dev.cwby.guitk.bindings.opengl.gl._
