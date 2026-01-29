@@ -1,6 +1,6 @@
 package dev.cwby.terminal
 
-import dev.cwby.graphics.Engine
+import dev.cwby.guitk.platform.Engine
 import dev.cwby.guitk.components.FloatingWindow
 import dev.cwby.guitk.bindings.sdl.SDLKeyboard
 

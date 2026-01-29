@@ -1,4 +1,4 @@
-package dev.cwby.graphics
+package dev.cwby.guitk.platform
 
 import dev.cwby.WindowManager
 import dev.cwby.clipboard.{ClipboardType, setClipboardContent}

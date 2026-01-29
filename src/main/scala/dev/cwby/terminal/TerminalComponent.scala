@@ -1,6 +1,6 @@
 package dev.cwby.terminal
 
-import dev.cwby.graphics.FontManager
+import dev.cwby.guitk.text.FontManager
 import dev.cwby.graphics.layout.component.IComponent
 import dev.cwby.guitk.renderer.Renderer2D
 

@@ -1,8 +1,8 @@
 package dev.cwby
 
 import dev.cwby.BufferManager
-import dev.cwby.graphics.Engine
-import dev.cwby.graphics.FontManager
+import dev.cwby.guitk.platform.Engine
+import dev.cwby.guitk.text.FontManager
 import dev.cwby.guitk.components.AutoCompleteWindow
 import dev.cwby.guitk.components.FloatingWindow
 import dev.cwby.guitk.components.TiledWindow

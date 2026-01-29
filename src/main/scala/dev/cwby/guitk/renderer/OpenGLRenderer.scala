@@ -10,7 +10,7 @@ import dev.cwby.guitk.components.SPLIT_HORIZONTAL
 import dev.cwby.guitk.components.SPLIT_VERTICAL
 import dev.cwby.guitk.components.TiledWindow
 import dev.cwby.graphics.layout.component.TextComponent
-import dev.cwby.graphics.FontManager
+import dev.cwby.guitk.text.FontManager
 
 object OpenGLRenderer {
   def getCurrentTextBuffer(): TextBuffer = {

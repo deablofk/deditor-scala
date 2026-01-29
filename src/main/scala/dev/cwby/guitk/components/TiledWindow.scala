@@ -1,7 +1,7 @@
 package dev.cwby.guitk.components
 
 import dev.cwby.WindowManager
-import dev.cwby.graphics.Engine
+import dev.cwby.guitk.platform.Engine
 import dev.cwby.lsp.LSPManager
 
 final val DIRECTION_LEFT: Int  = 0

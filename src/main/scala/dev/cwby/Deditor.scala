@@ -7,7 +7,7 @@ import dev.cwby.config.Theme
 import dev.cwby.config.TreeSitterParsersConfig
 import dev.cwby.config.readConfiguration
 import dev.cwby.editor.TextInteractionMode
-import dev.cwby.graphics.Engine
+import dev.cwby.guitk.platform.Engine
 import dev.cwby.treesitter.TreeSitterGrammarManager
 
 import scala.collection.mutable

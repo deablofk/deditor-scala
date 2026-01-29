@@ -1,4 +1,4 @@
-package dev.cwby.graphics
+package dev.cwby.guitk.text
 
 import dev.cwby.config.FontConfig
 import dev.cwby.getConfig
@@ -22,12 +22,11 @@ object FontManager {
 
   @throws[IOException]
   private def initializeFont(): Unit = {
-    // Try to load the configured font, fallback to system fonts
     val fontPath      = findFontPath(fontCfg.family)
     val fallbackFonts = Font.findSystemFallbackFonts()
     defaultFont = new TextShaper(fontPath, fontCfg.size, fallbackFonts)
     lineHeight = defaultFont.getLineHeight()
-    avgWidth = defaultFont.measureText("M") // Use 'M' as average width reference
+    avgWidth = defaultFont.measureText("M")
   }
 
   private def findFontPath(fontFamily: String): String = {
@@ -64,11 +63,9 @@ object FontManager {
   def increaseFontSize(sizeIncrease: Int): Unit = {
     fontCfg.size += sizeIncrease
     try {
-      // Clean up old font
       if (defaultFont != null) {
         defaultFont.cleanup()
       }
-      // Reinitialize with new size
       initializeFont()
     } catch {
       case e: IOException =>

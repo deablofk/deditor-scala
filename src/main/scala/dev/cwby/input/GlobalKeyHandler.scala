@@ -13,8 +13,8 @@ import dev.cwby.editor.TextInteractionMode.*
 import dev.cwby.executeCommand
 import dev.cwby.getBufferMode
 import dev.cwby.getCommandBuffer
-import dev.cwby.graphics.Engine
-import dev.cwby.graphics.FontManager
+import dev.cwby.guitk.platform.Engine
+import dev.cwby.guitk.text.FontManager
 import dev.cwby.guitk.renderer.OpenGLRenderer
 import dev.cwby.guitk.components.TiledWindow
 import dev.cwby.graphics.layout.component.TelescopeComponent

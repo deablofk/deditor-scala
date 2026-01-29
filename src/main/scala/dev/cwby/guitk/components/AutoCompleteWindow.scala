@@ -2,7 +2,7 @@ package dev.cwby.guitk.components
 
 import dev.cwby.BufferManager
 import dev.cwby.editor.TextBuffer
-import dev.cwby.graphics.FontManager
+import dev.cwby.guitk.text.FontManager
 import dev.cwby.graphics.layout.component.TextComponent
 import dev.cwby.lsp.CompletionItem
 

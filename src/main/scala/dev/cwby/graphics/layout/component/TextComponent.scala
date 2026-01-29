@@ -6,7 +6,7 @@ import dev.cwby.editor.TextBuffer
 import dev.cwby.editor.TextInteractionMode
 import dev.cwby.getBufferMode
 import dev.cwby.getConfig
-import dev.cwby.graphics.FontManager
+import dev.cwby.guitk.text.FontManager
 import dev.cwby.guitk.components.Window
 import dev.cwby.guitk.renderer.Renderer2D
 import dev.cwby.input.GlobalKeyHandler
