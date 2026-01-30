@@ -6,16 +6,16 @@ import dev.cwby.clipboard.ClipboardType
 import dev.cwby.clipboard.getClipboardContent
 import dev.cwby.clipboard.setClipboardContent
 import dev.cwby.commandHandlerState
-import dev.cwby.editor.TextBuffer
-import dev.cwby.editor.TextInteractionMode
-import dev.cwby.editor.TextInteractionMode.*
+import dev.cwby.editor.core.TextBuffer
+import dev.cwby.editor.core.TextInteractionMode
+import dev.cwby.editor.core.TextInteractionMode.*
 import dev.cwby.executeCommand
 import dev.cwby.getBufferMode
 import dev.cwby.getCommandBuffer
 import dev.cwby.guitk.text.FontManager
 import dev.cwby.guitk.renderer.OpenGLRenderer
 import dev.cwby.guitk.components.TiledWindow
-import dev.cwby.graphics.layout.component.TelescopeWindow
+import dev.cwby.editor.components.TelescopeWindow
 import dev.cwby.guitk.input.KeybindingTrie
 import dev.cwby.lsp.CompletionItemKind
 import dev.cwby.lsp.LSPManager
@@ -275,7 +275,7 @@ object VimKeybindingRegistry {
       "q",
       (w, _) => {
         w match
-          case dired: dev.cwby.graphics.layout.component.DiredWindow =>
+          case dired: dev.cwby.editor.components.DiredWindow =>
             dired.close()
           case _ =>
       }
@@ -285,7 +285,7 @@ object VimKeybindingRegistry {
       "g r",
       (w, _) => {
         w match
-          case dired: dev.cwby.graphics.layout.component.DiredWindow =>
+          case dired: dev.cwby.editor.components.DiredWindow =>
             dired.refresh()
           case _ =>
       }
@@ -358,7 +358,7 @@ object VimKeybindingRegistry {
           yankToClipboard(b.getCurrentLine().toString + "\n")
           b.deleteCurrentLine()
           WindowManager.getCurrentWindow match
-            case dired: dev.cwby.graphics.layout.component.DiredWindow =>
+            case dired: dev.cwby.editor.components.DiredWindow =>
               dired.applyEditsToFilesystem()
             case _ =>
       }
@@ -939,7 +939,7 @@ object VimKeybindingRegistry {
       (_, _) => {
         WindowManager.getAutoCompleteWindow.hide()
         WindowManager.getCurrentWindow match
-          case dired: dev.cwby.graphics.layout.component.DiredWindow =>
+          case dired: dev.cwby.editor.components.DiredWindow =>
             dired.applyEditsToFilesystem()
           case _ =>
         switchMode(NAVIGATION)

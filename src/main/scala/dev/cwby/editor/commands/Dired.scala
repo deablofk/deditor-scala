@@ -1,7 +1,7 @@
-package dev.cwby.commands
+package dev.cwby.editor.commands
 
 import dev.cwby.WindowManager
-import dev.cwby.graphics.layout.component.DiredWindow
+import dev.cwby.editor.components.DiredWindow
 
 private val dired: DiredWindow = DiredWindow(0, 0, 400, 400)
 

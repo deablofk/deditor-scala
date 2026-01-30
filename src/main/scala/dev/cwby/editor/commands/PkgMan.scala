@@ -1,7 +1,7 @@
-package dev.cwby.commands
+package dev.cwby.editor.commands
 
 import dev.cwby.WindowManager
-import dev.cwby.graphics.layout.component.PkgManWindow
+import dev.cwby.editor.components.PkgManWindow
 
 private val pkgManWindow: PkgManWindow = PkgManWindow(0, 0, 400, 400)
 

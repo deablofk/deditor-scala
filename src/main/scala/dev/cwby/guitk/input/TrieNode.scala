@@ -1,6 +1,6 @@
 package dev.cwby.guitk.input
 
-import dev.cwby.editor.TextBuffer
+import dev.cwby.editor.core.TextBuffer
 import dev.cwby.guitk.components.Window
 
 import scala.collection.mutable

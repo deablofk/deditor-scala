@@ -1,11 +1,10 @@
-package dev.cwby.graphics.layout.component
+package dev.cwby.editor.components
 
 import dev.cwby.BufferManager
-import dev.cwby.editor.TextBuffer
+import dev.cwby.editor.core.TextBuffer
 import dev.cwby.executeCommand
 import dev.cwby.getProjectPath
 import dev.cwby.guitk.components.FloatingWindow
-import dev.cwby.graphics.layout.component.TextComponent
 
 import java.io.File
 import scala.collection.mutable.ListBuffer

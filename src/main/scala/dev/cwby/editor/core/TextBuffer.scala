@@ -1,4 +1,4 @@
-package dev.cwby.editor
+package dev.cwby.editor.core
 
 import dev.cwby.getFileExtension
 import dev.cwby.lsp.Range

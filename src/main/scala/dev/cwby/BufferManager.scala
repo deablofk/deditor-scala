@@ -1,7 +1,7 @@
 package dev.cwby
 
-import dev.cwby.editor.FileChunkLoader
-import dev.cwby.editor.TextBuffer
+import dev.cwby.editor.core.FileChunkLoader
+import dev.cwby.editor.core.TextBuffer
 import dev.cwby.lsp.LSPManager
 import dev.cwby.pkgs.PackageCategory.LSP
 import dev.cwby.pkgs.PackageManager

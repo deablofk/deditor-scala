@@ -1,6 +1,6 @@
-package dev.cwby.editor
+package dev.cwby.editor.core
 
-import dev.cwby.editor.{Snapshot, CursorOps}
+import dev.cwby.editor.core.{Snapshot, CursorOps}
 
 final case class BufferState(
     lines: Array[StringBuilder],

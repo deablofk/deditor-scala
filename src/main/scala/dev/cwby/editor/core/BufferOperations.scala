@@ -1,7 +1,7 @@
-package dev.cwby.editor
+package dev.cwby.editor.core
 
 import dev.cwby.lsp.Range
-import dev.cwby.editor.UnicodeOps
+import dev.cwby.editor.core.UnicodeOps
 
 final case class Snapshot(
     lines: Array[String],

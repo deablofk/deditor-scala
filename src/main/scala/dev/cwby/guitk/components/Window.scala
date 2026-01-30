@@ -1,8 +1,8 @@
 package dev.cwby.guitk.components
 
-import dev.cwby.editor.TextBuffer
+import dev.cwby.editor.core.TextBuffer
 import dev.cwby.guitk.text.FontManager
-import dev.cwby.graphics.layout.component.IComponent
+import dev.cwby.editor.components.IComponent
 import dev.cwby.guitk.events.{EventDispatcher, WindowOpenEvent, WindowCloseEvent}
 
 class Window(

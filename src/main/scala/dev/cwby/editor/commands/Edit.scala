@@ -1,8 +1,8 @@
-package dev.cwby.commands
+package dev.cwby.editor.commands
 
 import dev.cwby.BufferManager
 import dev.cwby.WindowManager
-import dev.cwby.graphics.layout.component.TextComponent
+import dev.cwby.editor.components.TextComponent
 
 def runEdit(args: Array[String]): Boolean = {
   if (args.length < 2) {

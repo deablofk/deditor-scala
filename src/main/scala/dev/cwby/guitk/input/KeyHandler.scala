@@ -1,7 +1,7 @@
 package dev.cwby.guitk.input
 
-import dev.cwby.editor.TextBuffer
-import dev.cwby.editor.TextInteractionMode
+import dev.cwby.editor.core.TextBuffer
+import dev.cwby.editor.core.TextInteractionMode
 import dev.cwby.guitk.bindings.sdl.SDLConstants.*
 import dev.cwby.guitk.bindings.sdl.{SDLEventHelpers, SDLKeyboard, SDL_Event}
 import dev.cwby.guitk.components.Window

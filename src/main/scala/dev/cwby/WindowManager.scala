@@ -7,7 +7,7 @@ import dev.cwby.guitk.components.AutoCompleteWindow
 import dev.cwby.guitk.components.FloatingWindow
 import dev.cwby.guitk.components.TiledWindow
 import dev.cwby.guitk.components.Window
-import dev.cwby.graphics.layout.component.TextComponent
+import dev.cwby.editor.components.TextComponent
 
 import scala.collection.mutable.ListBuffer
 import scala.compiletime.uninitialized

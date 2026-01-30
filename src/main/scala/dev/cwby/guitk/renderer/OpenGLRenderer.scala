@@ -1,15 +1,15 @@
 package dev.cwby.guitk.renderer
 
 import dev.cwby.WindowManager
-import dev.cwby.editor.TextBuffer
-import dev.cwby.editor.TextInteractionMode
+import dev.cwby.editor.core.TextBuffer
+import dev.cwby.editor.core.TextInteractionMode
 import dev.cwby.getBufferMode
 import dev.cwby.getCommandBuffer
 import dev.cwby.getConfig
 import dev.cwby.guitk.components.SPLIT_HORIZONTAL
 import dev.cwby.guitk.components.SPLIT_VERTICAL
 import dev.cwby.guitk.components.TiledWindow
-import dev.cwby.graphics.layout.component.TextComponent
+import dev.cwby.editor.components.TextComponent
 import dev.cwby.guitk.text.FontManager
 
 object OpenGLRenderer {
@@ -17,7 +17,7 @@ object OpenGLRenderer {
     WindowManager.getCurrentWindow.component match {
       case textComponent: TextComponent =>
         textComponent.getBuffer
-      case telescopeComponent: dev.cwby.graphics.layout.component.TelescopeComponent =>
+      case telescopeComponent: dev.cwby.editor.components.TelescopeComponent =>
         telescopeComponent.getResultsBuffer()
       case _ =>
         null
@@ -89,7 +89,7 @@ class OpenGLRenderer(renderer: Renderer2D) {
     if (node.isLeaf) {
       if (node.component != null) {
         node.component match {
-          case textComponent: dev.cwby.graphics.layout.component.TextComponent =>
+          case textComponent: dev.cwby.editor.components.TextComponent =>
             textComponent.setRenderWindow(node)
           case _ =>
         }
@@ -115,7 +115,7 @@ class OpenGLRenderer(renderer: Renderer2D) {
       return
     }
     cmpWindow.getComponent match {
-      case textComponent: dev.cwby.graphics.layout.component.TextComponent =>
+      case textComponent: dev.cwby.editor.components.TextComponent =>
         textComponent.setRenderWindow(cmpWindow)
       case _ =>
     }
@@ -131,9 +131,9 @@ class OpenGLRenderer(renderer: Renderer2D) {
     for (window <- windows) {
       if (window.isVisible) {
         window.component match {
-          case textComponent: dev.cwby.graphics.layout.component.TextComponent =>
+          case textComponent: dev.cwby.editor.components.TextComponent =>
             textComponent.setRenderWindow(window)
-          case telescopeComponent: dev.cwby.graphics.layout.component.TelescopeComponent =>
+          case telescopeComponent: dev.cwby.editor.components.TelescopeComponent =>
             telescopeComponent.setRenderWindow(window)
           case _ =>
         }

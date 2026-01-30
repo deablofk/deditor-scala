@@ -1,6 +1,6 @@
 package dev.cwby.lsp
 
-import dev.cwby.editor.TextBuffer
+import dev.cwby.editor.core.TextBuffer
 import upickle.default._
 
 import java.io.BufferedInputStream

@@ -1,6 +1,6 @@
 package dev.cwby.lsp
 
-import dev.cwby.editor.TextBuffer
+import dev.cwby.editor.core.TextBuffer
 import dev.cwby.findProjectRoot
 import dev.cwby.pkgs.PackageData
 import dev.cwby.pkgs.PackageManager

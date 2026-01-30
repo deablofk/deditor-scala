@@ -1,4 +1,4 @@
-package dev.cwby.commands
+package dev.cwby.editor.commands
 
 import dev.cwby.WindowManager
 import dev.cwby.terminal.TerminalWindow

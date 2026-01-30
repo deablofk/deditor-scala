@@ -6,7 +6,7 @@ import dev.cwby.config.FontConfig
 import dev.cwby.config.Theme
 import dev.cwby.config.TreeSitterParsersConfig
 import dev.cwby.config.readConfiguration
-import dev.cwby.editor.TextInteractionMode
+import dev.cwby.editor.core.TextInteractionMode
 import dev.cwby.guitk.platform.Engine
 import dev.cwby.treesitter.TreeSitterGrammarManager
 

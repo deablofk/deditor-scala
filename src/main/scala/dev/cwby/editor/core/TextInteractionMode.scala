@@ -1,4 +1,4 @@
-package dev.cwby.editor
+package dev.cwby.editor.core
 
 enum TextInteractionMode(private val name: String) {
 

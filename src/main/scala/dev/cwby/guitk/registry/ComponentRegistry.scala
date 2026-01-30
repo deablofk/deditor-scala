@@ -1,6 +1,6 @@
 package dev.cwby.guitk.registry
 
-import dev.cwby.graphics.layout.component.IComponent
+import dev.cwby.editor.components.IComponent
 import scala.collection.mutable
 
 final class ComponentRegistry {

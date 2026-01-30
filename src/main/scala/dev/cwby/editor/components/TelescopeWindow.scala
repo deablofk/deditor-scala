@@ -1,6 +1,6 @@
-package dev.cwby.graphics.layout.component
+package dev.cwby.editor.components
 
-import dev.cwby.editor.TextBuffer
+import dev.cwby.editor.core.TextBuffer
 import dev.cwby.executeCommand
 import dev.cwby.getFileExtension
 import dev.cwby.getProjectPath

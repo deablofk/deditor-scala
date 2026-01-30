@@ -1,9 +1,9 @@
-package dev.cwby.commands
+package dev.cwby.editor.commands
 
 import dev.cwby.WindowManager
-import dev.cwby.editor.TextBuffer
+import dev.cwby.editor.core.TextBuffer
 import dev.cwby.getFileExtension
-import dev.cwby.graphics.layout.component.TextComponent
+import dev.cwby.editor.components.TextComponent
 
 import java.io.BufferedWriter
 import java.io.File

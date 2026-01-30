@@ -1,9 +1,8 @@
-package dev.cwby.graphics.layout.component
+package dev.cwby.editor.components
 
 import dev.cwby.BufferManager
-import dev.cwby.editor.TextBuffer
+import dev.cwby.editor.core.TextBuffer
 import dev.cwby.guitk.components.FloatingWindow
-import dev.cwby.graphics.layout.component.TextComponent
 import dev.cwby.pkgs.PackageManager
 
 class PkgManWindow(x: Float, y: Float, width: Float, height: Float) extends FloatingWindow(x, y, width, height, 0.9f) {

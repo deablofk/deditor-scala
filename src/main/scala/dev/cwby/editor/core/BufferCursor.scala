@@ -1,6 +1,6 @@
-package dev.cwby.editor
+package dev.cwby.editor.core
 
-import dev.cwby.editor.BufferCore
+import dev.cwby.editor.core.BufferCore
 
 object UnicodeOps:
   @inline def isCombiningMark(codePoint: Int): Boolean =

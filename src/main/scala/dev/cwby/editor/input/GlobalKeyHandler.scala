@@ -1,9 +1,9 @@
 package dev.cwby.editor.input
 
 import dev.cwby.WindowManager
-import dev.cwby.editor.TextBuffer
-import dev.cwby.editor.TextInteractionMode
-import dev.cwby.editor.TextInteractionMode.*
+import dev.cwby.editor.core.TextBuffer
+import dev.cwby.editor.core.TextInteractionMode
+import dev.cwby.editor.core.TextInteractionMode.*
 import dev.cwby.getBufferMode
 import dev.cwby.guitk.platform.Engine
 import dev.cwby.guitk.renderer.OpenGLRenderer

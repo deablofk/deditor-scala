@@ -1,4 +1,4 @@
-package dev.cwby.editor
+package dev.cwby.editor.core
 
 import java.io.File
 import java.io.IOException

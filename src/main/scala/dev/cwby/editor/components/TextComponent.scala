@@ -1,9 +1,9 @@
-package dev.cwby.graphics.layout.component
+package dev.cwby.editor.components
 
 import dev.cwby.WindowManager
 import dev.cwby.config.hexToInt
-import dev.cwby.editor.TextBuffer
-import dev.cwby.editor.TextInteractionMode
+import dev.cwby.editor.core.TextBuffer
+import dev.cwby.editor.core.TextInteractionMode
 import dev.cwby.getBufferMode
 import dev.cwby.getConfig
 import dev.cwby.guitk.text.FontManager

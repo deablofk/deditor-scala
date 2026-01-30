@@ -1,6 +1,6 @@
 package dev.cwby
 
-import dev.cwby.commands._
+import dev.cwby.editor.commands._
 
 import scala.collection.mutable
 

@@ -4,15 +4,15 @@ import dev.cwby.WindowManager
 import dev.cwby.appendCommandBuffer
 import dev.cwby.clipboard.ClipboardType
 import dev.cwby.clipboard.getClipboardContent
-import dev.cwby.editor.TextBuffer
-import dev.cwby.editor.TextInteractionMode
-import dev.cwby.editor.TextInteractionMode.*
+import dev.cwby.editor.core.TextBuffer
+import dev.cwby.editor.core.TextInteractionMode
+import dev.cwby.editor.core.TextInteractionMode.*
 import dev.cwby.getBufferMode
 import dev.cwby.guitk.platform.Engine
 import dev.cwby.guitk.text.FontManager
 import dev.cwby.guitk.renderer.OpenGLRenderer
-import dev.cwby.graphics.layout.component.TextComponent
-import dev.cwby.graphics.layout.component.TelescopeWindow
+import dev.cwby.editor.components.TextComponent
+import dev.cwby.editor.components.TelescopeWindow
 import dev.cwby.guitk.bindings.sdl.SDLConstants.*
 import dev.cwby.guitk.bindings.sdl.{SDLEventHelpers, SDL_Event}
 import dev.cwby.guitk.input.KeyHandler

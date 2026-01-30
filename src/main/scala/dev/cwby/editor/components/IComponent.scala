@@ -1,4 +1,4 @@
-package dev.cwby.graphics.layout.component
+package dev.cwby.editor.components
 
 import dev.cwby.guitk.renderer.Renderer2D
 

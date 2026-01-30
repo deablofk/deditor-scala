@@ -2,9 +2,9 @@ package dev.cwby.editor.input
 
 import dev.cwby.clipboard.ClipboardType
 import dev.cwby.clipboard.setClipboardContent
-import dev.cwby.editor.TextBuffer
-import dev.cwby.editor.TextInteractionMode
-import dev.cwby.editor.TextInteractionMode.*
+import dev.cwby.editor.core.TextBuffer
+import dev.cwby.editor.core.TextInteractionMode
+import dev.cwby.editor.core.TextInteractionMode.*
 
 object VimTextOperations {
   private case class BufferPos(y: Int, x: Int)
