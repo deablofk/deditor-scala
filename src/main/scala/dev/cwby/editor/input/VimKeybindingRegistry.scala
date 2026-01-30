@@ -1,6 +1,7 @@
 package dev.cwby.editor.input
 
 import dev.cwby.WindowManager
+import dev.cwby.editor.core.given
 import dev.cwby.clearCommandBuffer
 import dev.cwby.clipboard.ClipboardType
 import dev.cwby.clipboard.getClipboardContent
@@ -14,9 +15,8 @@ import dev.cwby.getBufferMode
 import dev.cwby.getCommandBuffer
 import dev.cwby.guitk.text.FontManager
 import dev.cwby.guitk.renderer.OpenGLRenderer
-import dev.cwby.guitk.components.TiledWindow
+import dev.cwby.guitk.components.{TiledWindow, Window}
 import dev.cwby.editor.components.TelescopeWindow
-import dev.cwby.guitk.input.KeybindingTrie
 import dev.cwby.lsp.CompletionItemKind
 import dev.cwby.lsp.LSPManager
 import dev.cwby.setBufferMode
@@ -585,7 +585,7 @@ object VimKeybindingRegistry {
         w.ensureCursorVisibleHorizontal(b)
       }
     )
-    val wordSearchAction: (dev.cwby.guitk.components.Window, TextBuffer) => Unit = (w, b) => {
+    val wordSearchAction: (Window[TextBuffer], TextBuffer) => Unit = (w, b) => {
       if b != null && b.beginSearchForWordUnderCursor() then
         w.ensureCursorVisible(b)
         w.ensureCursorVisibleHorizontal(b)
@@ -658,7 +658,7 @@ object VimKeybindingRegistry {
       "CTRL-w h",
       (w, _) => {
         w match
-          case tiledWindow: TiledWindow =>
+          case tiledWindow: TiledWindow[TextBuffer] =>
             tiledWindow.moveLeft()
           case _ =>
       }
@@ -668,7 +668,7 @@ object VimKeybindingRegistry {
       "CTRL-w l",
       (w, _) => {
         w match
-          case tiledWindow: TiledWindow =>
+          case tiledWindow: TiledWindow[TextBuffer] =>
             tiledWindow.moveRight()
           case _ =>
       }
@@ -678,7 +678,7 @@ object VimKeybindingRegistry {
       "CTRL-w j",
       (w, _) => {
         w match
-          case tiledWindow: TiledWindow =>
+          case tiledWindow: TiledWindow[TextBuffer] =>
             tiledWindow.moveDown()
           case _ =>
       }
@@ -688,7 +688,7 @@ object VimKeybindingRegistry {
       "CTRL-w k",
       (w, _) => {
         w match
-          case tiledWindow: TiledWindow =>
+          case tiledWindow: TiledWindow[TextBuffer] =>
             tiledWindow.moveUp()
           case _ =>
       }
@@ -698,7 +698,7 @@ object VimKeybindingRegistry {
       "CTRL-w v",
       (w, _) => {
         w match
-          case _: TiledWindow =>
+          case _: TiledWindow[TextBuffer] =>
             executeCommand("vs")
           case _ =>
       }
@@ -708,7 +708,7 @@ object VimKeybindingRegistry {
       "CTRL-w s",
       (w, _) => {
         w match
-          case _: TiledWindow =>
+          case _: TiledWindow[TextBuffer] =>
             executeCommand("s")
           case _ =>
       }

@@ -1,7 +1,7 @@
 package dev.cwby.terminal
 
 import dev.cwby.guitk.text.FontManager
-import dev.cwby.editor.components.IComponent
+import dev.cwby.guitk.components.IComponent
 import dev.cwby.guitk.renderer.Renderer2D
 
 import scala.scalanative.unsafe._

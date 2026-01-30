@@ -7,7 +7,7 @@ import dev.cwby.editor.core.TextInteractionMode
 import dev.cwby.getBufferMode
 import dev.cwby.getConfig
 import dev.cwby.guitk.text.FontManager
-import dev.cwby.guitk.components.Window
+import dev.cwby.guitk.components.{Window, IComponent}
 import dev.cwby.guitk.renderer.Renderer2D
 import dev.cwby.editor.input.GlobalKeyHandler
 import dev.cwby.treesitter.SyntaxHighlighter
@@ -27,7 +27,7 @@ class TextComponent extends IComponent {
   
 
   private var buffer: TextBuffer                                       = uninitialized
-  private var renderWindow: Window                                     = uninitialized
+  private var renderWindow: Window[TextBuffer]                         = uninitialized
   private var cursorVisible: Boolean                                   = true
   private var lastBlinkTime: Long                                      = 0
   private var cachedStyles: mutable.Map[String, mutable.Map[Int, Int]] = mutable.Map.empty
@@ -42,7 +42,7 @@ class TextComponent extends IComponent {
     buffer
   }
 
-  def setRenderWindow(window: Window): TextComponent = {
+  def setRenderWindow(window: Window[TextBuffer]): TextComponent = {
     this.renderWindow = window
     this
   }

@@ -1,4 +1,4 @@
-package dev.cwby.guitk.input
+package dev.cwby.editor.input
 
 import dev.cwby.editor.core.TextBuffer
 import dev.cwby.guitk.components.Window
@@ -8,8 +8,8 @@ import scala.compiletime.uninitialized
 
 class TrieNode {
   var children: mutable.Map[String, TrieNode] = mutable.Map[String, TrieNode]()
-  var action: (Window, TextBuffer) => Unit    = uninitialized
-  var lastPressTime: Long                     = uninitialized
+  var action: (Window[TextBuffer], TextBuffer) => Unit = uninitialized
+  var lastPressTime: Long = uninitialized
 
   this.action = null
   this.lastPressTime = System.currentTimeMillis()

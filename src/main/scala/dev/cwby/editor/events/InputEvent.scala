@@ -1,6 +1,7 @@
-package dev.cwby.guitk.events
+package dev.cwby.editor.events
 
 import dev.cwby.editor.core.TextInteractionMode
+import dev.cwby.guitk.events.Event
 
 sealed trait InputEvent extends Event {
   def timestamp: Long

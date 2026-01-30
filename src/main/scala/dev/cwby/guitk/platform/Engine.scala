@@ -7,9 +7,7 @@ import dev.cwby.guitk.bindings.opengl.gl
 import dev.cwby.guitk.bindings.sdl.*
 import dev.cwby.guitk.bindings.sdl.SDLConstants.*
 import dev.cwby.guitk.renderer.{Renderer2D, OpenGLRenderer}
-import dev.cwby.editor.input.GlobalKeyHandler
-import dev.cwby.lsp.LSPManager
-import dev.cwby.guitk.events.EventLogger
+import dev.cwby.guitk.input.IKeyHandler
 
 import scala.compiletime.uninitialized
 import scala.scalanative.unsafe.*
@@ -20,7 +18,8 @@ object Engine {
   private var height: Int = 720
   private var shouldClose: Boolean = false
 
-  private val keyHandler = GlobalKeyHandler
+  private var keyHandler: IKeyHandler = _
+  private var onCloseCallback: () => Unit = () => ()
 
   inline def getWidth: Int = width
 
@@ -29,6 +28,14 @@ object Engine {
   inline def getWindow: SDL_Window = window
 
   inline def requestClose(): Unit = shouldClose = true
+
+  def setKeyHandler(handler: IKeyHandler): Unit = {
+    keyHandler = handler
+  }
+
+  def setOnCloseCallback(callback: () => Unit): Unit = {
+    onCloseCallback = callback
+  }
 
   private inline def createWindow(): Unit = {
     if !SDL.init(INIT_VIDEO) then
@@ -54,7 +61,7 @@ object Engine {
 
         case EVENT_QUIT | EVENT_WINDOW_CLOSE_REQUESTED =>
           shouldClose = true
-          LSPManager.closeAllLsp()
+          onCloseCallback()
 
         case EVENT_KEY_DOWN =>
           keyHandler.handle(event)
@@ -92,7 +99,6 @@ object Engine {
   }
 
   inline def run(): Unit = {
-    EventLogger.initialize()
     createWindow()
     val renderer = createRenderer()
     val event = stackalloc[SDL_Event](1)

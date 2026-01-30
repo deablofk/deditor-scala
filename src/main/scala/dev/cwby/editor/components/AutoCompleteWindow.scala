@@ -1,15 +1,15 @@
-package dev.cwby.guitk.components
+package dev.cwby.editor.components
 
 import dev.cwby.BufferManager
 import dev.cwby.editor.core.TextBuffer
 import dev.cwby.guitk.text.FontManager
-import dev.cwby.editor.components.TextComponent
+import dev.cwby.guitk.components.FloatingWindow
 import dev.cwby.lsp.CompletionItem
 
 import scala.collection.mutable.ListBuffer
 import scala.compiletime.uninitialized
 
-class AutoCompleteWindow(x: Float, y: Float, width: Float, height: Float) extends FloatingWindow(x, y, width, height) {
+class AutoCompleteWindow(x: Float, y: Float, width: Float, height: Float) extends FloatingWindow[TextBuffer](x, y, width, height) {
 
   private var suggestions: ListBuffer[CompletionItem] = ListBuffer[CompletionItem]()
   private var preferredWidth: Float                   = width

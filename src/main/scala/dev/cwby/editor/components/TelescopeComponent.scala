@@ -1,7 +1,7 @@
 package dev.cwby.editor.components
 
 import dev.cwby.editor.core.TextBuffer
-import dev.cwby.guitk.components.Window
+import dev.cwby.guitk.components.{Window, IComponent}
 import dev.cwby.guitk.renderer.Renderer2D
 
 import scala.compiletime.uninitialized
@@ -11,9 +11,9 @@ class TelescopeComponent(resultsBuffer: TextBuffer, previewBuffer: TextBuffer) e
   private val resultsText: TextComponent = new TextComponent().setBuffer(resultsBuffer)
   private val previewText: TextComponent = new TextComponent().setBuffer(previewBuffer)
 
-  private var renderWindow: Window = uninitialized
+  private var renderWindow: Window[TextBuffer] = uninitialized
 
-  def setRenderWindow(window: Window): TelescopeComponent = {
+  def setRenderWindow(window: Window[TextBuffer]): TelescopeComponent = {
     this.renderWindow = window
     resultsText.setRenderWindow(window)
     previewText.setRenderWindow(window)

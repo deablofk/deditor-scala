@@ -9,6 +9,9 @@ import dev.cwby.config.readConfiguration
 import dev.cwby.editor.core.TextInteractionMode
 import dev.cwby.guitk.platform.Engine
 import dev.cwby.treesitter.TreeSitterGrammarManager
+import dev.cwby.editor.input.GlobalKeyHandler
+import dev.cwby.lsp.LSPManager
+import dev.cwby.editor.events.EventLogger
 
 import scala.collection.mutable
 
@@ -43,6 +46,9 @@ inline def getProjectPath: String =
 object Deditor {
 
   def main(args: Array[String]): Unit = {
+    EventLogger.initialize()
+    Engine.setKeyHandler(GlobalKeyHandler)
+    Engine.setOnCloseCallback(() => LSPManager.closeAllLsp())
     Engine.run()
   }
 

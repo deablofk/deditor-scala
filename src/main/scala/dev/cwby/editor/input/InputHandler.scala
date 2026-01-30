@@ -15,7 +15,6 @@ import dev.cwby.editor.components.TextComponent
 import dev.cwby.editor.components.TelescopeWindow
 import dev.cwby.guitk.bindings.sdl.SDLConstants.*
 import dev.cwby.guitk.bindings.sdl.{SDLEventHelpers, SDL_Event}
-import dev.cwby.guitk.input.KeyHandler
 import dev.cwby.lsp.CompletionItemKind
 import dev.cwby.lsp.LSPManager
 import dev.cwby.terminal.TerminalWindow

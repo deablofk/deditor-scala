@@ -1,11 +1,9 @@
 package dev.cwby.guitk.components
 
-import dev.cwby.editor.core.TextBuffer
 import dev.cwby.guitk.text.FontManager
-import dev.cwby.editor.components.IComponent
 import dev.cwby.guitk.events.{EventDispatcher, WindowOpenEvent, WindowCloseEvent}
 
-class Window(
+class Window[Buffer](
     var title: String,
     var x: Float,
     var y: Float,
@@ -55,22 +53,22 @@ class Window(
     offsetY = 0
   }
 
-  def ensureCursorVisible(buffer: TextBuffer): Unit = {
+  def ensureCursorVisible[B](buffer: B)(using ops: BufferOps[B]): Unit = {
     if buffer == null then return
 
     val visibleLines = getVisibleLines
     if visibleLines <= 0 then return
 
-    val cursorY = buffer.cursorY
+    val cursorY = ops.getCursorY(buffer)
 
     if cursorY < offsetY then offsetY = cursorY
     else if cursorY >= offsetY + visibleLines then offsetY = cursorY - visibleLines + 1
 
-    val maxOffsetY = Math.max(0, buffer.lines.length - visibleLines)
+    val maxOffsetY = Math.max(0, ops.getLinesCount(buffer) - visibleLines)
     offsetY = Math.min(Math.max(0, offsetY), maxOffsetY)
   }
 
-  def ensureCursorVisibleHorizontal(buffer: TextBuffer): Unit = {
+  def ensureCursorVisibleHorizontal[B](buffer: B)(using ops: BufferOps[B]): Unit = {
     if buffer == null then return
 
     val font        = FontManager.getDefaultFont()
@@ -79,10 +77,11 @@ class Window(
 
     if usableWidth <= 0 || lineHeight <= 0 then return
 
-    if buffer.cursorY < 0 || buffer.cursorY >= buffer.lines.length then return
+    val cursorY = ops.getCursorY(buffer)
+    if cursorY < 0 || cursorY >= ops.getLinesCount(buffer) then return
 
-    val line    = buffer.lines(buffer.cursorY)
-    val cursorX = Math.min(Math.max(0, buffer.cursorX), line.length())
+    val line    = ops.getLine(buffer, cursorY)
+    val cursorX = Math.min(Math.max(0, ops.getCursorX(buffer)), line.length())
 
     val tabSize    = 4
     val spaceWidth = font.measureText(" ")

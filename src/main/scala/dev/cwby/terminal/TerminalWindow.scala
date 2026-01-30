@@ -5,7 +5,7 @@ import dev.cwby.guitk.components.FloatingWindow
 import dev.cwby.guitk.bindings.sdl.SDLKeyboard
 
 final class TerminalWindow(x: Float, y: Float, width: Float, height: Float)
-    extends FloatingWindow(x, y, width, height, 0.9f):
+    extends FloatingWindow[dev.cwby.editor.core.TextBuffer](x, y, width, height, 0.9f):
 
   private val defaultShell: String =
     sys.env

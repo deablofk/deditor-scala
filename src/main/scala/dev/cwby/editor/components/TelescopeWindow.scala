@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable.ListBuffer
 
 class TelescopeWindow(x: Float, y: Float, width: Float, height: Float)
-    extends FloatingWindow(x, y, width, height, 0.9f) {
+    extends FloatingWindow[TextBuffer](x, y, width, height, 0.9f) {
 
   enum Mode {
     case Files

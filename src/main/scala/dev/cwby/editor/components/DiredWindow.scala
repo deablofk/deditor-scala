@@ -9,7 +9,7 @@ import dev.cwby.guitk.components.FloatingWindow
 import java.io.File
 import scala.collection.mutable.ListBuffer
 
-class DiredWindow(x: Float, y: Float, width: Float, height: Float) extends FloatingWindow(x, y, width, height, 0.9f) {
+class DiredWindow(x: Float, y: Float, width: Float, height: Float) extends FloatingWindow[TextBuffer](x, y, width, height, 0.9f) {
 
   private val buffer: TextBuffer                     = BufferManager.addEmptyBuffer()
   private var currentDir: File                       = new File(getProjectPath).getAbsoluteFile

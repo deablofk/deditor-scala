@@ -1,10 +1,11 @@
-package dev.cwby.guitk.input
+package dev.cwby.editor.input
 
 import dev.cwby.editor.core.TextBuffer
 import dev.cwby.editor.core.TextInteractionMode
 import dev.cwby.guitk.bindings.sdl.SDLConstants.*
 import dev.cwby.guitk.bindings.sdl.{SDLEventHelpers, SDLKeyboard, SDL_Event}
 import dev.cwby.guitk.components.Window
+import dev.cwby.guitk.input.IKeyHandler
 
 import scala.scalanative.unsafe.*
 
@@ -17,7 +18,7 @@ abstract class KeyHandler extends IKeyHandler {
 
   protected def getCurrentMode: TextInteractionMode
   
-  protected def getCurrentWindow: Window
+  protected def getCurrentWindow: Window[TextBuffer]
   
   protected def getCurrentBuffer: TextBuffer
 

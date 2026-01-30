@@ -13,17 +13,17 @@ final val SPLIT_NONE: Int       = 0
 final val SPLIT_VERTICAL: Int   = 1
 final val SPLIT_HORIZONTAL: Int = 2
 
-final class TiledWindow(
+final class TiledWindow[Buffer](
     initialX: Float,
     initialY: Float,
     initialWidth: Float,
     initialHeight: Float,
-    var father: TiledWindow,
+    var father: TiledWindow[Buffer],
     var splitRatio: Float = 0.5f,
-    var leftChild: TiledWindow = null,
-    var rightChild: TiledWindow = null,
+    var leftChild: TiledWindow[Buffer] = null,
+    var rightChild: TiledWindow[Buffer] = null,
     var splitType: Int = SPLIT_NONE
-) extends Window("", initialX, initialY, initialWidth, initialHeight) {
+) extends Window[Buffer]("", initialX, initialY, initialWidth, initialHeight) {
 
   inline def isLeaf: Boolean = leftChild == null && rightChild == null
 
@@ -83,7 +83,7 @@ final class TiledWindow(
       rightChild.updateSize(x, y + topHeight, width, bottomHeight)
   }
 
-  private def findNeighbor(direction: Int): TiledWindow = {
+  private def findNeighbor(direction: Int): TiledWindow[Buffer] = {
     var node = this
     while node.father != null do
       val parent  = node.father
@@ -102,7 +102,7 @@ final class TiledWindow(
     null
   }
 
-  inline private def findLeaf(node: TiledWindow): TiledWindow = {
+  inline private def findLeaf(node: TiledWindow[Buffer]): TiledWindow[Buffer] = {
     var current = node
 
     while !current.isLeaf do
@@ -127,36 +127,36 @@ final class TiledWindow(
     current
   }
 
-  inline private def move(direction: Int): TiledWindow = {
+  inline private def move(direction: Int): TiledWindow[Buffer] = {
     val neighbor = findNeighbor(direction)
 
-    if neighbor != null then WindowManager.setCurrentWindow(neighbor)
+    if neighbor != null then WindowManager.setCurrentWindow(neighbor.asInstanceOf[Window[dev.cwby.editor.core.TextBuffer]])
 
     neighbor
   }
 
-  inline def moveLeft(): TiledWindow = move(DIRECTION_LEFT)
+  inline def moveLeft(): TiledWindow[Buffer] = move(DIRECTION_LEFT)
 
-  inline def moveRight(): TiledWindow = move(DIRECTION_RIGHT)
+  inline def moveRight(): TiledWindow[Buffer] = move(DIRECTION_RIGHT)
 
-  inline def moveUp(): TiledWindow = move(DIRECTION_UP)
+  inline def moveUp(): TiledWindow[Buffer] = move(DIRECTION_UP)
 
-  inline def moveDown(): TiledWindow = move(DIRECTION_DOWN)
+  inline def moveDown(): TiledWindow[Buffer] = move(DIRECTION_DOWN)
 
-  inline private def reattachSibling(sibling: TiledWindow, parent: TiledWindow): Unit = {
+  inline private def reattachSibling(sibling: TiledWindow[Buffer], parent: TiledWindow[Buffer]): Unit = {
     val grandParent = parent.father
 
     sibling.father = grandParent
 
-    if grandParent == null then WindowManager.setRootNode(sibling)
+    if grandParent == null then WindowManager.setRootNode(sibling.asInstanceOf[TiledWindow[dev.cwby.editor.core.TextBuffer]])
     else if grandParent.leftChild eq parent then grandParent.leftChild = sibling
     else grandParent.rightChild = sibling
 
     sibling.updateSize(parent.x, parent.y, parent.width, parent.height)
-    WindowManager.setCurrentWindow(findLeaf(sibling))
+    WindowManager.setCurrentWindow(findLeaf(sibling).asInstanceOf[Window[dev.cwby.editor.core.TextBuffer]])
   }
 
-  inline private def clearParentReference(parent: TiledWindow): Unit = {
+  inline private def clearParentReference(parent: TiledWindow[Buffer]): Unit = {
     val grandParent = parent.father
 
     if grandParent != null then
@@ -164,7 +164,7 @@ final class TiledWindow(
       else grandParent.rightChild = null
     else WindowManager.setRootNode(null)
 
-    WindowManager.setCurrentWindow(grandParent)
+    WindowManager.setCurrentWindow(grandParent.asInstanceOf[Window[dev.cwby.editor.core.TextBuffer]])
   }
 
   override def onClose(): Unit = {

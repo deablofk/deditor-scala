@@ -85,7 +85,7 @@ class OpenGLRenderer(renderer: Renderer2D) {
     FontManager.getDefaultFont().flushPendingUpdates()
   }
 
-  def renderTiledWindows(node: TiledWindow): Unit = {
+  def renderTiledWindows(node: TiledWindow[TextBuffer]): Unit = {
     if (node.isLeaf) {
       if (node.component != null) {
         node.component match {

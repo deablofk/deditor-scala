@@ -2,13 +2,13 @@ package dev.cwby.guitk.components
 
 import dev.cwby.WindowManager
 
-abstract class FloatingWindow(
+abstract class FloatingWindow[Buffer](
     x: Float,
     y: Float,
     width: Float,
     height: Float,
     val sizeFactor: Float = 1.0f
-) extends Window("", x, y, width, height) {
+) extends Window[Buffer]("", x, y, width, height) {
 
   def show(x: Float, y: Float): Unit = {
 
@@ -26,7 +26,7 @@ abstract class FloatingWindow(
   }
 
   override def close(): Unit = {
-    WindowManager.closeFloatingWindow(this)
+    WindowManager.closeFloatingWindow(this.asInstanceOf[FloatingWindow[dev.cwby.editor.core.TextBuffer]])
     onClose()
   }
 }

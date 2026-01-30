@@ -19,7 +19,7 @@ object GlobalKeyHandler extends BaseInputHandler {
 
   override protected def getCurrentMode: TextInteractionMode = getBufferMode
   
-  override protected def getCurrentWindow: Window = WindowManager.getCurrentWindow
+  override protected def getCurrentWindow: Window[TextBuffer] = WindowManager.getCurrentWindow
   
   override protected def getCurrentBuffer: TextBuffer = OpenGLRenderer.getCurrentTextBuffer()
 
