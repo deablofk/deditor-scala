@@ -12,6 +12,8 @@ import dev.cwby.treesitter.TreeSitterGrammarManager
 import dev.cwby.editor.input.GlobalKeyHandler
 import dev.cwby.lsp.LSPManager
 import dev.cwby.editor.events.EventLogger
+import dev.cwby.editor.renderer.EditorRenderer
+import dev.cwby.clipboard.{ClipboardType, setClipboardContent}
 
 import scala.collection.mutable
 
@@ -49,7 +51,14 @@ object Deditor {
     EventLogger.initialize()
     Engine.setKeyHandler(GlobalKeyHandler)
     Engine.setOnCloseCallback(() => LSPManager.closeAllLsp())
-    Engine.run()
+    Engine.setOnResizeCallback((w, h) => WindowManager.resizeFloatingWindows(w, h))
+    Engine.setOnClipboardUpdateCallback(text => setClipboardContent(ClipboardType.SYSTEM, text))
+    
+    Engine.run { renderer =>
+      val editorRenderer = EditorRenderer(renderer)
+      Engine.setOnRenderCallback((w, h) => editorRenderer.render(w, h))
+    }
+    Engine.shutdown()
   }
 
 }

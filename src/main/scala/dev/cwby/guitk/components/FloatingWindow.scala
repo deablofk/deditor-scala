@@ -1,13 +1,12 @@
 package dev.cwby.guitk.components
 
-import dev.cwby.WindowManager
-
 abstract class FloatingWindow[Buffer](
     x: Float,
     y: Float,
     width: Float,
     height: Float,
-    val sizeFactor: Float = 1.0f
+    val sizeFactor: Float = 1.0f,
+    private var callbacks: WindowCallbacks[Buffer] = WindowCallbacks.empty[Buffer]
 ) extends Window[Buffer]("", x, y, width, height) {
 
   def show(x: Float, y: Float): Unit = {
@@ -25,8 +24,12 @@ abstract class FloatingWindow[Buffer](
     this.visible = true
   }
 
+  def setCallbacks(cb: WindowCallbacks[Buffer]): Unit = {
+    this.callbacks = cb
+  }
+
   override def close(): Unit = {
-    WindowManager.closeFloatingWindow(this.asInstanceOf[FloatingWindow[dev.cwby.editor.core.TextBuffer]])
+    callbacks.onWindowClosed(this)
     onClose()
   }
 }

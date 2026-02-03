@@ -14,7 +14,7 @@ import dev.cwby.executeCommand
 import dev.cwby.getBufferMode
 import dev.cwby.getCommandBuffer
 import dev.cwby.guitk.text.FontManager
-import dev.cwby.guitk.renderer.OpenGLRenderer
+import dev.cwby.editor.renderer.EditorRenderer
 import dev.cwby.guitk.components.{TiledWindow, Window}
 import dev.cwby.editor.components.TelescopeWindow
 import dev.cwby.lsp.CompletionItemKind
@@ -756,7 +756,7 @@ object VimKeybindingRegistry {
           executeCommand("edit " + location.getUri().replace("file://", ""))
           val x = location.getRange().getStart().getCharacter()
           val y = location.getRange().getStart().getLine()
-          OpenGLRenderer.getCurrentTextBuffer().gotoPosition(x, y)
+          EditorRenderer.getCurrentTextBuffer().gotoPosition(x, y)
         else
           (
           )

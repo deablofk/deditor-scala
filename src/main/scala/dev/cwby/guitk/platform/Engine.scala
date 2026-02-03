@@ -1,12 +1,10 @@
 package dev.cwby.guitk.platform
 
-import dev.cwby.WindowManager
-import dev.cwby.clipboard.{ClipboardType, setClipboardContent}
 import dev.cwby.guitk.bindings.opengl.GLConstants.*
 import dev.cwby.guitk.bindings.opengl.gl
 import dev.cwby.guitk.bindings.sdl.*
 import dev.cwby.guitk.bindings.sdl.SDLConstants.*
-import dev.cwby.guitk.renderer.{Renderer2D, OpenGLRenderer}
+import dev.cwby.guitk.renderer.Renderer2D
 import dev.cwby.guitk.input.IKeyHandler
 
 import scala.compiletime.uninitialized
@@ -20,6 +18,9 @@ object Engine {
 
   private var keyHandler: IKeyHandler = _
   private var onCloseCallback: () => Unit = () => ()
+  private var onResizeCallback: (Int, Int) => Unit = (_, _) => ()
+  private var onClipboardUpdateCallback: String => Unit = _ => ()
+  private var onRenderCallback: (Int, Int) => Unit = (_, _) => ()
 
   inline def getWidth: Int = width
 
@@ -37,6 +38,18 @@ object Engine {
     onCloseCallback = callback
   }
 
+  def setOnResizeCallback(callback: (Int, Int) => Unit): Unit = {
+    onResizeCallback = callback
+  }
+
+  def setOnClipboardUpdateCallback(callback: String => Unit): Unit = {
+    onClipboardUpdateCallback = callback
+  }
+
+  def setOnRenderCallback(callback: (Int, Int) => Unit): Unit = {
+    onRenderCallback = callback
+  }
+
   private inline def createWindow(): Unit = {
     if !SDL.init(INIT_VIDEO) then
       throw IllegalStateException("Unable to initialize SDL")
@@ -48,14 +61,14 @@ object Engine {
       throw RuntimeException("Failed to create SDL window")
   }
 
-  private inline def createRenderer(): OpenGLRenderer = {
+  private inline def createRenderer(): Renderer2D = {
     val ctx = SDLGL.SDL_GL_CreateContext(window)
     SDLGL.SDL_GL_MakeCurrent(window, ctx)
 
-    OpenGLRenderer(Renderer2D(width, height))
+    Renderer2D(width, height)
   }
 
-  private inline def handleEvents(renderer: OpenGLRenderer, event: Ptr[SDL_Event]): Unit = {
+  private inline def handleEvents(renderer: Renderer2D, event: Ptr[SDL_Event]): Unit = {
     while (SDLEvents.SDL_PollEvent(event)) {
       SDLEventHelpers.getEventType(event) match {
 
@@ -70,39 +83,38 @@ object Engine {
           keyHandler.handleInput(event)
 
         case EVENT_CLIPBOARD_UPDATE =>
-          setClipboardContent(
-            ClipboardType.SYSTEM,
-            SDLClipboard.SDL_GetClipboardText()
-          )
+          onClipboardUpdateCallback(SDLClipboard.SDL_GetClipboardText())
 
         case EVENT_WINDOW_RESIZED =>
           val (w, h) = SDLVideo.SDL_GetWindowSizeInPixels(window)
           width = w
           height = h
-          renderer.onResize(w, h)
-          WindowManager.resizeFloatingWindows(w, h)
+          renderer.updateProjection(w, h)
+          onResizeCallback(w, h)
         case _ => ()
       }
     }
   }
 
-  private inline def renderFrame(renderer: OpenGLRenderer): Unit = {
+  private inline def renderFrame(): Unit = {
     gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    renderer.render(width, height)
+    onRenderCallback(width, height)
     SDLGL.SDL_GL_SwapWindow(window)
   }
 
-  private inline def mainLoop(renderer: OpenGLRenderer, event: Ptr[SDL_Event]): Unit = {
-    while !shouldClose do
-      handleEvents(renderer, event)
-      renderFrame(renderer)
-  }
-
-  inline def run(): Unit = {
+  def run(initCallback: Renderer2D => Unit): Unit = Zone {
     createWindow()
     val renderer = createRenderer()
     val event = stackalloc[SDL_Event](1)
-    mainLoop(renderer, event)
+    
+    initCallback(renderer)
+    
+    while !shouldClose do
+      handleEvents(renderer, event)
+      renderFrame()
+  }
+
+  def shutdown(): Unit = {
     SDL.quit()
   }
 }

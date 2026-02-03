@@ -1,4 +1,4 @@
-package dev.cwby.guitk.renderer
+package dev.cwby.editor.renderer
 
 import dev.cwby.WindowManager
 import dev.cwby.editor.core.TextBuffer
@@ -11,8 +11,9 @@ import dev.cwby.guitk.components.SPLIT_VERTICAL
 import dev.cwby.guitk.components.TiledWindow
 import dev.cwby.editor.components.TextComponent
 import dev.cwby.guitk.text.FontManager
+import dev.cwby.guitk.renderer.Renderer2D
 
-object OpenGLRenderer {
+object EditorRenderer {
   def getCurrentTextBuffer(): TextBuffer = {
     WindowManager.getCurrentWindow.component match {
       case textComponent: TextComponent =>
@@ -25,7 +26,7 @@ object OpenGLRenderer {
   }
 }
 
-class OpenGLRenderer(renderer: Renderer2D) {
+class EditorRenderer(renderer: Renderer2D) {
   private val windowBorderColor: Int       = 0xff3a3a3a
   private val windowBorderThickness: Float = 2.0f
 
@@ -42,7 +43,7 @@ class OpenGLRenderer(renderer: Renderer2D) {
     renderer.drawRect(x, y, width, height, 0xff000000)
 
     val buffer =
-      try OpenGLRenderer.getCurrentTextBuffer()
+      try EditorRenderer.getCurrentTextBuffer()
       catch case _: Throwable => null
 
     val statusText =

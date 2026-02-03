@@ -5,16 +5,42 @@ import dev.cwby.guitk.platform.Engine
 import dev.cwby.guitk.text.FontManager
 import dev.cwby.editor.components.AutoCompleteWindow
 import dev.cwby.editor.core.TextBuffer
-import dev.cwby.guitk.components.{FloatingWindow, TiledWindow, Window}
+import dev.cwby.guitk.components.{FloatingWindow, TiledWindow, Window, WindowCallbacks}
 import dev.cwby.editor.components.TextComponent
+
+import dev.cwby.lsp.LSPManager
 
 import scala.collection.mutable.ListBuffer
 import scala.compiletime.uninitialized
 
 object WindowManager {
-  private var rootNode: TiledWindow[TextBuffer] =
-    TiledWindow[TextBuffer](0, 0, Engine.getWidth.toFloat, Engine.getHeight.toFloat - FontManager.getLineHeight(), null)
-  this.rootNode.component = TextComponent().setBuffer(BufferManager.addEmptyBuffer())
+  private val windowCallbacks = new WindowCallbacks[TextBuffer] {
+    def onWindowClosed(window: Window[TextBuffer]): Unit = {
+      window match {
+        case fw: FloatingWindow[TextBuffer] => closeFloatingWindow(fw)
+        case _ => ()
+      }
+    }
+
+    def onWindowFocused(window: Window[TextBuffer]): Unit = {
+      setCurrentWindow(window)
+      window match {
+        case tw: TiledWindow[TextBuffer] => setRootNode(tw)
+        case _ => ()
+      }
+    }
+
+    def onRootWindowClosed(): Unit = {
+      LSPManager.closeAllLsp()
+      Engine.requestClose()
+    }
+  }
+  private var rootNode: TiledWindow[TextBuffer] = {
+    val node = TiledWindow[TextBuffer](0, 0, Engine.getWidth.toFloat, Engine.getHeight.toFloat - FontManager.getLineHeight(), null)
+    node.setCallbacks(windowCallbacks)
+    node.component = TextComponent().setBuffer(BufferManager.addEmptyBuffer())
+    node
+  }
   private var currentWindow: Window[TextBuffer]           = rootNode
   private var currentTiledWindow: TiledWindow[TextBuffer] = uninitialized
   private val autoCompleteWindow: AutoCompleteWindow      = AutoCompleteWindow(0, 0, 400, 0)
@@ -41,6 +67,7 @@ object WindowManager {
   }
 
   def openFloatingWindow(window: FloatingWindow[TextBuffer]): Unit = {
+    window.setCallbacks(windowCallbacks)
     window.visible = true
     currentWindow match {
       case tiled: TiledWindow[TextBuffer] =>

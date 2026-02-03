@@ -1,8 +1,5 @@
 package dev.cwby.guitk.components
 
-import dev.cwby.WindowManager
-import dev.cwby.guitk.platform.Engine
-import dev.cwby.lsp.LSPManager
 
 final val DIRECTION_LEFT: Int  = 0
 final val DIRECTION_RIGHT: Int = 1
@@ -22,7 +19,8 @@ final class TiledWindow[Buffer](
     var splitRatio: Float = 0.5f,
     var leftChild: TiledWindow[Buffer] = null,
     var rightChild: TiledWindow[Buffer] = null,
-    var splitType: Int = SPLIT_NONE
+    var splitType: Int = SPLIT_NONE,
+    private var callbacks: WindowCallbacks[Buffer] = WindowCallbacks.empty[Buffer]
 ) extends Window[Buffer]("", initialX, initialY, initialWidth, initialHeight) {
 
   inline def isLeaf: Boolean = leftChild == null && rightChild == null
@@ -130,7 +128,7 @@ final class TiledWindow[Buffer](
   inline private def move(direction: Int): TiledWindow[Buffer] = {
     val neighbor = findNeighbor(direction)
 
-    if neighbor != null then WindowManager.setCurrentWindow(neighbor.asInstanceOf[Window[dev.cwby.editor.core.TextBuffer]])
+    if neighbor != null then callbacks.onWindowFocused(neighbor)
 
     neighbor
   }
@@ -148,12 +146,12 @@ final class TiledWindow[Buffer](
 
     sibling.father = grandParent
 
-    if grandParent == null then WindowManager.setRootNode(sibling.asInstanceOf[TiledWindow[dev.cwby.editor.core.TextBuffer]])
+    if grandParent == null then callbacks.onWindowFocused(sibling)
     else if grandParent.leftChild eq parent then grandParent.leftChild = sibling
     else grandParent.rightChild = sibling
 
     sibling.updateSize(parent.x, parent.y, parent.width, parent.height)
-    WindowManager.setCurrentWindow(findLeaf(sibling).asInstanceOf[Window[dev.cwby.editor.core.TextBuffer]])
+    callbacks.onWindowFocused(findLeaf(sibling))
   }
 
   inline private def clearParentReference(parent: TiledWindow[Buffer]): Unit = {
@@ -162,17 +160,21 @@ final class TiledWindow[Buffer](
     if grandParent != null then
       if grandParent.leftChild eq parent then grandParent.leftChild = null
       else grandParent.rightChild = null
-    else WindowManager.setRootNode(null)
 
-    WindowManager.setCurrentWindow(grandParent.asInstanceOf[Window[dev.cwby.editor.core.TextBuffer]])
+    if grandParent != null then callbacks.onWindowFocused(grandParent)
+  }
+
+  def setCallbacks(cb: WindowCallbacks[Buffer]): Unit = {
+    this.callbacks = cb
+    if leftChild != null then leftChild.setCallbacks(cb)
+    if rightChild != null then rightChild.setCallbacks(cb)
   }
 
   override def onClose(): Unit = {
     val parent = this.father
 
     if parent == null then
-      LSPManager.closeAllLsp()
-      Engine.requestClose()
+      callbacks.onRootWindowClosed()
       return
 
     val sibling = if this == parent.leftChild then parent.rightChild else parent.leftChild

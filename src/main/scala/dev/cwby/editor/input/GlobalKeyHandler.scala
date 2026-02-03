@@ -6,7 +6,7 @@ import dev.cwby.editor.core.TextInteractionMode
 import dev.cwby.editor.core.TextInteractionMode.*
 import dev.cwby.getBufferMode
 import dev.cwby.guitk.platform.Engine
-import dev.cwby.guitk.renderer.OpenGLRenderer
+import dev.cwby.editor.renderer.EditorRenderer
 import dev.cwby.guitk.components.Window
 import dev.cwby.guitk.bindings.sdl.SDLKeyboard
 import dev.cwby.setBufferMode
@@ -21,7 +21,7 @@ object GlobalKeyHandler extends BaseInputHandler {
   
   override protected def getCurrentWindow: Window[TextBuffer] = WindowManager.getCurrentWindow
   
-  override protected def getCurrentBuffer: TextBuffer = OpenGLRenderer.getCurrentTextBuffer()
+  override protected def getCurrentBuffer: TextBuffer = EditorRenderer.getCurrentTextBuffer()
 
   override protected def switchMode(mode: TextInteractionMode): Unit = {
     if getBufferMode == mode then return

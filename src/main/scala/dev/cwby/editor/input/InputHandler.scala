@@ -10,7 +10,7 @@ import dev.cwby.editor.core.TextInteractionMode.*
 import dev.cwby.getBufferMode
 import dev.cwby.guitk.platform.Engine
 import dev.cwby.guitk.text.FontManager
-import dev.cwby.guitk.renderer.OpenGLRenderer
+import dev.cwby.editor.renderer.EditorRenderer
 import dev.cwby.editor.components.TextComponent
 import dev.cwby.editor.components.TelescopeWindow
 import dev.cwby.guitk.bindings.sdl.SDLConstants.*

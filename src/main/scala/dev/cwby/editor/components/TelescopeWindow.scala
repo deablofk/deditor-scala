@@ -102,7 +102,7 @@ class TelescopeWindow(x: Float, y: Float, width: Float, height: Float)
             val col1  = parts(2).toIntOption.getOrElse(1)
             close()
             executeCommand(s"edit $file")
-            val buffer = dev.cwby.guitk.renderer.OpenGLRenderer.getCurrentTextBuffer()
+            val buffer = dev.cwby.editor.renderer.EditorRenderer.getCurrentTextBuffer()
             if (buffer != null) {
               buffer.gotoPosition(Math.max(0, col1 - 1), Math.max(0, line1 - 1))
             }
