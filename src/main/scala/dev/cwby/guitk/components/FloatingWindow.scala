@@ -1,13 +1,13 @@
 package dev.cwby.guitk.components
 
-abstract class FloatingWindow[Buffer](
+abstract class FloatingWindow(
     x: Float,
     y: Float,
     width: Float,
     height: Float,
     val sizeFactor: Float = 1.0f,
-    private var callbacks: WindowCallbacks[Buffer] = WindowCallbacks.empty[Buffer]
-) extends Window[Buffer]("", x, y, width, height) {
+    private var callbacks: WindowCallbacks = WindowCallbacks.empty
+) extends Window("", x, y, width, height) {
 
   def show(x: Float, y: Float): Unit = {
 
@@ -24,7 +24,7 @@ abstract class FloatingWindow[Buffer](
     this.visible = true
   }
 
-  def setCallbacks(cb: WindowCallbacks[Buffer]): Unit = {
+  def setCallbacks(cb: WindowCallbacks): Unit = {
     this.callbacks = cb
   }
 

@@ -6,39 +6,39 @@ import dev.cwby.guitk.events.{EventDispatcher, WindowOpenEvent, WindowCloseEvent
 object EventLogger {
   
   def initialize(): Unit = {
-    EventDispatcher.subscribe[WindowOpenEvent[TextBuffer]](logWindowOpen)
-    EventDispatcher.subscribe[WindowCloseEvent[TextBuffer]](logWindowClose)
-    EventDispatcher.subscribe[WindowResizeEvent[TextBuffer]](logWindowResize)
-    EventDispatcher.subscribe[WindowFocusEvent[TextBuffer]](logWindowFocus)
-    EventDispatcher.subscribe[WindowMoveEvent[TextBuffer]](logWindowMove)
-    EventDispatcher.subscribe[WindowVisibilityEvent[TextBuffer]](logWindowVisibility)
+    EventDispatcher.subscribe[WindowOpenEvent](logWindowOpen)
+    EventDispatcher.subscribe[WindowCloseEvent](logWindowClose)
+    EventDispatcher.subscribe[WindowResizeEvent](logWindowResize)
+    EventDispatcher.subscribe[WindowFocusEvent](logWindowFocus)
+    EventDispatcher.subscribe[WindowMoveEvent](logWindowMove)
+    EventDispatcher.subscribe[WindowVisibilityEvent](logWindowVisibility)
     EventDispatcher.subscribe[CommandExecuteEvent](logCommandExecute)
     EventDispatcher.subscribe[CommandCompleteEvent](logCommandComplete)
     EventDispatcher.subscribe[CommandErrorEvent](logCommandError)
   }
 
-  private def logWindowOpen(event: WindowOpenEvent[TextBuffer]): Unit = {
+  private def logWindowOpen(event: WindowOpenEvent): Unit = {
     println(s"[WINDOW] Opened: ${event.window.title} at (${event.window.x}, ${event.window.y})")
   }
 
-  private def logWindowClose(event: WindowCloseEvent[TextBuffer]): Unit = {
+  private def logWindowClose(event: WindowCloseEvent): Unit = {
     println(s"[WINDOW] Closed: ${event.window.title}")
   }
 
-  private def logWindowResize(event: WindowResizeEvent[TextBuffer]): Unit = {
+  private def logWindowResize(event: WindowResizeEvent): Unit = {
     println(s"[WINDOW] Resized: ${event.window.title} from ${event.oldWidth}x${event.oldHeight} to ${event.newWidth}x${event.newHeight}")
   }
 
-  private def logWindowFocus(event: WindowFocusEvent[TextBuffer]): Unit = {
+  private def logWindowFocus(event: WindowFocusEvent): Unit = {
     val action = if event.gained then "gained" else "lost"
     println(s"[WINDOW] Focus $action: ${event.window.title}")
   }
 
-  private def logWindowMove(event: WindowMoveEvent[TextBuffer]): Unit = {
+  private def logWindowMove(event: WindowMoveEvent): Unit = {
     println(s"[WINDOW] Moved: ${event.window.title} from (${event.oldX}, ${event.oldY}) to (${event.newX}, ${event.newY})")
   }
 
-  private def logWindowVisibility(event: WindowVisibilityEvent[TextBuffer]): Unit = {
+  private def logWindowVisibility(event: WindowVisibilityEvent): Unit = {
     val state = if event.visible then "visible" else "hidden"
     println(s"[WINDOW] Visibility changed: ${event.window.title} is now $state")
   }

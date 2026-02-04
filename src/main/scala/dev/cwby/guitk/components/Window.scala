@@ -3,7 +3,7 @@ package dev.cwby.guitk.components
 import dev.cwby.guitk.text.FontManager
 import dev.cwby.guitk.events.{EventDispatcher, WindowOpenEvent, WindowCloseEvent}
 
-class Window[Buffer](
+class Window(
     var title: String,
     var x: Float,
     var y: Float,
@@ -51,62 +51,4 @@ class Window[Buffer](
   def resetScroll(): Unit = {
     offsetX = 0
     offsetY = 0
-  }
-
-  def ensureCursorVisible[B](buffer: B)(using ops: BufferOps[B]): Unit = {
-    if buffer == null then return
-
-    val visibleLines = getVisibleLines
-    if visibleLines <= 0 then return
-
-    val cursorY = ops.getCursorY(buffer)
-
-    if cursorY < offsetY then offsetY = cursorY
-    else if cursorY >= offsetY + visibleLines then offsetY = cursorY - visibleLines + 1
-
-    val maxOffsetY = Math.max(0, ops.getLinesCount(buffer) - visibleLines)
-    offsetY = Math.min(Math.max(0, offsetY), maxOffsetY)
-  }
-
-  def ensureCursorVisibleHorizontal[B](buffer: B)(using ops: BufferOps[B]): Unit = {
-    if buffer == null then return
-
-    val font        = FontManager.getDefaultFont()
-    val lineHeight  = FontManager.getLineHeight()
-    val usableWidth = (width - FontManager.getAvgWidth()).toInt
-
-    if usableWidth <= 0 || lineHeight <= 0 then return
-
-    val cursorY = ops.getCursorY(buffer)
-    if cursorY < 0 || cursorY >= ops.getLinesCount(buffer) then return
-
-    val line    = ops.getLine(buffer, cursorY)
-    val cursorX = Math.min(Math.max(0, ops.getCursorX(buffer)), line.length())
-
-    val tabSize    = 4
-    val spaceWidth = font.measureText(" ")
-
-    var xPx = 0.0f
-    var i   = 0
-    while i < cursorX && i < line.length() do
-      val codePoint = line.toString.codePointAt(i)
-
-      if codePoint == '\t' then
-        val tabWidth = spaceWidth * tabSize
-        xPx = ((xPx + tabWidth) / tabWidth).toInt * tabWidth
-      else
-        val glyph = new String(Character.toChars(codePoint))
-        xPx += font.measureText(glyph)
-
-      i += Character.charCount(codePoint)
-
-    val cursorLeftPx  = xPx.toInt
-    val cursorRightPx = (xPx + FontManager.getAvgWidth()).toInt
-    val viewLeftPx    = offsetX
-    val viewRightPx   = offsetX + usableWidth
-
-    if cursorLeftPx < viewLeftPx then offsetX = cursorLeftPx
-    else if cursorRightPx > viewRightPx then offsetX = cursorRightPx - usableWidth
-
-    offsetX = Math.max(0, offsetX)
   }

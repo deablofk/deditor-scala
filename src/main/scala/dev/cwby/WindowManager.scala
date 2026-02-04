@@ -14,18 +14,18 @@ import scala.collection.mutable.ListBuffer
 import scala.compiletime.uninitialized
 
 object WindowManager {
-  private val windowCallbacks = new WindowCallbacks[TextBuffer] {
-    def onWindowClosed(window: Window[TextBuffer]): Unit = {
+  private val windowCallbacks = new WindowCallbacks {
+    def onWindowClosed(window: Window): Unit = {
       window match {
-        case fw: FloatingWindow[TextBuffer] => closeFloatingWindow(fw)
+        case fw: FloatingWindow => closeFloatingWindow(fw)
         case _ => ()
       }
     }
 
-    def onWindowFocused(window: Window[TextBuffer]): Unit = {
+    def onWindowFocused(window: Window): Unit = {
       setCurrentWindow(window)
       window match {
-        case tw: TiledWindow[TextBuffer] => setRootNode(tw)
+        case tw: TiledWindow => setRootNode(tw)
         case _ => ()
       }
     }
@@ -35,30 +35,30 @@ object WindowManager {
       Engine.requestClose()
     }
   }
-  private var rootNode: TiledWindow[TextBuffer] = {
-    val node = TiledWindow[TextBuffer](0, 0, Engine.getWidth.toFloat, Engine.getHeight.toFloat - FontManager.getLineHeight(), null)
+  private var rootNode: TiledWindow = {
+    val node = TiledWindow(0, 0, Engine.getWidth.toFloat, Engine.getHeight.toFloat - FontManager.getLineHeight(), null)
     node.setCallbacks(windowCallbacks)
     node.component = TextComponent().setBuffer(BufferManager.addEmptyBuffer())
     node
   }
-  private var currentWindow: Window[TextBuffer]           = rootNode
-  private var currentTiledWindow: TiledWindow[TextBuffer] = uninitialized
+  private var currentWindow: Window           = rootNode
+  private var currentTiledWindow: TiledWindow = uninitialized
   private val autoCompleteWindow: AutoCompleteWindow      = AutoCompleteWindow(0, 0, 400, 0)
-  private val floatingWindows: ListBuffer[FloatingWindow[TextBuffer]] = ListBuffer[FloatingWindow[TextBuffer]]()
+  private val floatingWindows: ListBuffer[FloatingWindow] = ListBuffer[FloatingWindow]()
 
-  inline def setRootNode(rootNode: TiledWindow[TextBuffer]): Unit = this.rootNode = rootNode
+  inline def setRootNode(rootNode: TiledWindow): Unit = this.rootNode = rootNode
 
-  inline def getRootNode: TiledWindow[TextBuffer] = rootNode
+  inline def getRootNode: TiledWindow = rootNode
 
-  inline def getCurrentWindow: Window[TextBuffer] = currentWindow
+  inline def getCurrentWindow: Window = currentWindow
 
   inline def getAutoCompleteWindow: AutoCompleteWindow = autoCompleteWindow
 
-  inline def getFloatingWindows: ListBuffer[FloatingWindow[TextBuffer]] = floatingWindows
+  inline def getFloatingWindows: ListBuffer[FloatingWindow] = floatingWindows
 
-  def setCurrentWindow(currentWindow: Window[TextBuffer]): Unit = {
+  def setCurrentWindow(currentWindow: Window): Unit = {
     currentWindow match {
-      case tiledWindow: TiledWindow[TextBuffer] =>
+      case tiledWindow: TiledWindow =>
         this.currentTiledWindow = tiledWindow
       case _ => ()
     }
@@ -66,11 +66,11 @@ object WindowManager {
     this.currentWindow = currentWindow
   }
 
-  def openFloatingWindow(window: FloatingWindow[TextBuffer]): Unit = {
+  def openFloatingWindow(window: FloatingWindow): Unit = {
     window.setCallbacks(windowCallbacks)
     window.visible = true
     currentWindow match {
-      case tiled: TiledWindow[TextBuffer] =>
+      case tiled: TiledWindow =>
         currentTiledWindow = tiled
       case _ => ()
     }
@@ -79,7 +79,7 @@ object WindowManager {
   }
 
   private def computeCenteredSize(
-      window: FloatingWindow[TextBuffer],
+      window: FloatingWindow,
       viewWidth: Float,
       viewHeight: Float
   ): (Float, Float, Float, Float) = {
@@ -91,7 +91,7 @@ object WindowManager {
     (x, y, targetWidth, targetHeight)
   }
 
-  inline private def layoutFloatingWindow(window: FloatingWindow[TextBuffer], viewWidth: Float, viewHeight: Float): Unit = {
+  inline private def layoutFloatingWindow(window: FloatingWindow, viewWidth: Float, viewHeight: Float): Unit = {
     val (x, y, targetWidth, targetHeight) = computeCenteredSize(window, viewWidth, viewHeight)
     window.x = x
     window.y = y
@@ -99,7 +99,7 @@ object WindowManager {
     window.height = targetHeight
   }
 
-  def showFloatingWindow(window: FloatingWindow[TextBuffer]): Unit = {
+  def showFloatingWindow(window: FloatingWindow): Unit = {
     val (x, y, targetWidth, targetHeight) = computeCenteredSize(window, Engine.getWidth, Engine.getHeight)
     window.show(x, y, targetWidth, targetHeight)
   }
@@ -108,7 +108,7 @@ object WindowManager {
     floatingWindows.foreach(layoutFloatingWindow(_, viewWidth, viewHeight))
   }
 
-  def closeFloatingWindow(window: FloatingWindow[TextBuffer]): Unit = {
+  def closeFloatingWindow(window: FloatingWindow): Unit = {
     window.visible = false
     floatingWindows -= window
     currentWindow =

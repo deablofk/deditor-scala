@@ -6,16 +6,16 @@ import dev.cwby.editor.core.TextBuffer
 import dev.cwby.guitk.components.TiledWindow
 import dev.cwby.editor.components.TextComponent
 
-@inline private def ensureComponent(tw: TiledWindow[TextBuffer]): TextComponent = {
+@inline private def ensureComponent(tw: TiledWindow): TextComponent = {
   if (tw.component != null)
     tw.component.asInstanceOf[TextComponent]
   else
     TextComponent().setBuffer(BufferManager.addEmptyBuffer())
 }
 
-@inline private def split(doSplit: TiledWindow[TextBuffer] => Unit): Boolean = {
+@inline private def split(doSplit: TiledWindow => Unit): Boolean = {
   WindowManager.getCurrentWindow match {
-    case tw: TiledWindow[TextBuffer] =>
+    case tw: TiledWindow =>
       doSplit(tw)
       val component = ensureComponent(tw)
       tw.leftChild.component = component

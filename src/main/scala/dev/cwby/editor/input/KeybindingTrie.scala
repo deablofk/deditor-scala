@@ -18,7 +18,7 @@ object KeybindingTrie {
   private def insertKeybinding(
       mode: TextInteractionMode,
       keybinding: String,
-      action: (Window[TextBuffer], TextBuffer) => Unit
+      action: (Window, TextBuffer) => Unit
   ): Unit = {
     var currentNode = getRoot(mode)
     val keys        = keybinding.split(" ")
@@ -36,27 +36,27 @@ object KeybindingTrie {
     currentNode.action = action
   }
 
-  def nmap(keybinding: String, action: (Window[TextBuffer], TextBuffer) => Unit): Unit = {
+  def nmap(keybinding: String, action: (Window, TextBuffer) => Unit): Unit = {
     insertKeybinding(TextInteractionMode.NAVIGATION, keybinding, action)
   }
 
-  def imap(keybinding: String, action: (Window[TextBuffer], TextBuffer) => Unit): Unit = {
+  def imap(keybinding: String, action: (Window, TextBuffer) => Unit): Unit = {
     insertKeybinding(TextInteractionMode.INSERT, keybinding, action)
   }
 
-  def smap(keybinding: String, action: (Window[TextBuffer], TextBuffer) => Unit): Unit = {
+  def smap(keybinding: String, action: (Window, TextBuffer) => Unit): Unit = {
     insertKeybinding(TextInteractionMode.SELECT, keybinding, action)
   }
 
-  def cmap(keybinding: String, action: (Window[TextBuffer], TextBuffer) => Unit): Unit = {
+  def cmap(keybinding: String, action: (Window, TextBuffer) => Unit): Unit = {
     insertKeybinding(TextInteractionMode.COMMAND, keybinding, action)
   }
 
-  def map(keybinding: String, action: (Window[TextBuffer], TextBuffer) => Unit): Unit = {
+  def map(keybinding: String, action: (Window, TextBuffer) => Unit): Unit = {
     insertKeybinding(TextInteractionMode.ANY, keybinding, action)
   }
 
-  def map(mode: TextInteractionMode, keybinding: String, action: (Window[TextBuffer], TextBuffer) => Unit): Unit = {
+  def map(mode: TextInteractionMode, keybinding: String, action: (Window, TextBuffer) => Unit): Unit = {
     insertKeybinding(mode, keybinding, action)
   }
 

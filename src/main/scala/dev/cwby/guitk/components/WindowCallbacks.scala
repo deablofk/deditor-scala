@@ -1,15 +1,15 @@
 package dev.cwby.guitk.components
 
-trait WindowCallbacks[Buffer] {
-  def onWindowClosed(window: Window[Buffer]): Unit
-  def onWindowFocused(window: Window[Buffer]): Unit
+trait WindowCallbacks {
+  def onWindowClosed(window: Window): Unit
+  def onWindowFocused(window: Window): Unit
   def onRootWindowClosed(): Unit
 }
 
 object WindowCallbacks {
-  def empty[Buffer]: WindowCallbacks[Buffer] = new WindowCallbacks[Buffer] {
-    def onWindowClosed(window: Window[Buffer]): Unit = ()
-    def onWindowFocused(window: Window[Buffer]): Unit = ()
+  def empty: WindowCallbacks = new WindowCallbacks {
+    def onWindowClosed(window: Window): Unit = ()
+    def onWindowFocused(window: Window): Unit = ()
     def onRootWindowClosed(): Unit = ()
   }
 }

@@ -18,7 +18,7 @@ abstract class KeyHandler extends IKeyHandler {
 
   protected def getCurrentMode: TextInteractionMode
   
-  protected def getCurrentWindow: Window[TextBuffer]
+  protected def getCurrentWindow: Window
   
   protected def getCurrentBuffer: TextBuffer
 

@@ -8,7 +8,7 @@ import scala.compiletime.uninitialized
 
 class TrieNode {
   var children: mutable.Map[String, TrieNode] = mutable.Map[String, TrieNode]()
-  var action: (Window[TextBuffer], TextBuffer) => Unit = uninitialized
+  var action: (Window, TextBuffer) => Unit = uninitialized
   var lastPressTime: Long = uninitialized
 
   this.action = null

@@ -10,6 +10,7 @@ import dev.cwby.commandHandlerState
 import dev.cwby.editor.core.TextBuffer
 import dev.cwby.editor.core.TextInteractionMode
 import dev.cwby.editor.core.TextInteractionMode.*
+import dev.cwby.editor.window.EditorWindowExtensions.*
 import dev.cwby.executeCommand
 import dev.cwby.getBufferMode
 import dev.cwby.getCommandBuffer
@@ -130,8 +131,8 @@ object VimKeybindingRegistry {
           case _ =>
             if b != null then
               b.searchNext()
-              w.ensureCursorVisible(b)
-              w.ensureCursorVisibleHorizontal(b)
+              w.ensureTextBufferCursorVisible(b)
+              w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.map(
@@ -144,8 +145,8 @@ object VimKeybindingRegistry {
           case _ =>
             if b != null then
               b.searchPrev()
-              w.ensureCursorVisible(b)
-              w.ensureCursorVisibleHorizontal(b)
+              w.ensureTextBufferCursorVisible(b)
+              w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
 
@@ -177,8 +178,8 @@ object VimKeybindingRegistry {
       (w, b) => {
         if b != null then
           b.searchNext()
-          w.ensureCursorVisible(b)
-          w.ensureCursorVisibleHorizontal(b)
+          w.ensureTextBufferCursorVisible(b)
+          w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.map(
@@ -187,8 +188,8 @@ object VimKeybindingRegistry {
       (w, b) => {
         if b != null then
           b.searchPrev()
-          w.ensureCursorVisible(b)
-          w.ensureCursorVisibleHorizontal(b)
+          w.ensureTextBufferCursorVisible(b)
+          w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
 
@@ -257,8 +258,8 @@ object VimKeybindingRegistry {
       (w, b) => {
         if b != null then
           b.searchNext()
-          w.ensureCursorVisible(b)
-          w.ensureCursorVisibleHorizontal(b)
+          w.ensureTextBufferCursorVisible(b)
+          w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
@@ -266,8 +267,8 @@ object VimKeybindingRegistry {
       (w, b) => {
         if b != null then
           b.searchPrev()
-          w.ensureCursorVisible(b)
-          w.ensureCursorVisibleHorizontal(b)
+          w.ensureTextBufferCursorVisible(b)
+          w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
 
@@ -499,64 +500,64 @@ object VimKeybindingRegistry {
       "g g",
       (w, b) => {
         b.moveCursor(0, 0)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
       "G",
       (w, b) => {
         b.moveCursor(0, b.lines.length - 1)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
       "h",
       (w, b) => {
         b.moveCursorLeft()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
       "j",
       (w, b) => {
         b.moveCursorDown()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
       "k",
       (w, b) => {
         b.moveCursorUp()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
       "l",
       (w, b) => {
         b.moveCursorRight()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
       "w",
       (w, b) => {
         b.moveNextWord()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
       "b",
       (w, b) => {
         b.movePreviousWord()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
@@ -564,16 +565,16 @@ object VimKeybindingRegistry {
       (w, b) => {
         val x = Math.max(0, b.getCurrentLine().length() - 1)
         b.gotoPosition(x, b.cursorY)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
       "0",
       (w, b) => {
         b.gotoPosition(0, b.cursorY)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
@@ -581,14 +582,14 @@ object VimKeybindingRegistry {
       (w, b) => {
         val x = firstNonWhitespaceIndex(b.getCurrentLine())
         b.gotoPosition(x, b.cursorY)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
-    val wordSearchAction: (Window[TextBuffer], TextBuffer) => Unit = (w, b) => {
+    val wordSearchAction: (Window, TextBuffer) => Unit = (w, b) => {
       if b != null && b.beginSearchForWordUnderCursor() then
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
     }
 
     KeybindingTrie.nmap("#", wordSearchAction)
@@ -599,8 +600,8 @@ object VimKeybindingRegistry {
       (w, b) => {
         val delta = Math.max(1, w.getVisibleLines / 2)
         b.moveCursor(b.cursorX, b.cursorY - delta)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
@@ -608,8 +609,8 @@ object VimKeybindingRegistry {
       (w, b) => {
         val delta = Math.max(1, w.getVisibleLines / 2)
         b.moveCursor(b.cursorX, b.cursorY + delta)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
@@ -642,23 +643,23 @@ object VimKeybindingRegistry {
       "CTRL-p",
       (w, b) => {
         b.moveCursorUp()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
       "CTRL-n",
       (w, b) => {
         b.moveCursorDown()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.nmap(
       "CTRL-w h",
       (w, _) => {
         w match
-          case tiledWindow: TiledWindow[TextBuffer] =>
+          case tiledWindow: TiledWindow =>
             tiledWindow.moveLeft()
           case _ =>
       }
@@ -668,7 +669,7 @@ object VimKeybindingRegistry {
       "CTRL-w l",
       (w, _) => {
         w match
-          case tiledWindow: TiledWindow[TextBuffer] =>
+          case tiledWindow: TiledWindow =>
             tiledWindow.moveRight()
           case _ =>
       }
@@ -678,7 +679,7 @@ object VimKeybindingRegistry {
       "CTRL-w j",
       (w, _) => {
         w match
-          case tiledWindow: TiledWindow[TextBuffer] =>
+          case tiledWindow: TiledWindow =>
             tiledWindow.moveDown()
           case _ =>
       }
@@ -688,7 +689,7 @@ object VimKeybindingRegistry {
       "CTRL-w k",
       (w, _) => {
         w match
-          case tiledWindow: TiledWindow[TextBuffer] =>
+          case tiledWindow: TiledWindow =>
             tiledWindow.moveUp()
           case _ =>
       }
@@ -698,7 +699,7 @@ object VimKeybindingRegistry {
       "CTRL-w v",
       (w, _) => {
         w match
-          case _: TiledWindow[TextBuffer] =>
+          case _: TiledWindow =>
             executeCommand("vs")
           case _ =>
       }
@@ -708,7 +709,7 @@ object VimKeybindingRegistry {
       "CTRL-w s",
       (w, _) => {
         w match
-          case _: TiledWindow[TextBuffer] =>
+          case _: TiledWindow =>
             executeCommand("s")
           case _ =>
       }
@@ -790,32 +791,32 @@ object VimKeybindingRegistry {
       "h",
       (w, b) => {
         b.moveCursorLeft()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.smap(
       "j",
       (w, b) => {
         b.moveCursorDown()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.smap(
       "k",
       (w, b) => {
         b.moveCursorUp()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.smap(
       "l",
       (w, b) => {
         b.moveCursorRight()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
 
@@ -823,16 +824,16 @@ object VimKeybindingRegistry {
       "w",
       (w, b) => {
         b.moveNextWord()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.smap(
       "b",
       (w, b) => {
         b.movePreviousWord()
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.smap(
@@ -845,16 +846,16 @@ object VimKeybindingRegistry {
         while i < len && Character.isLetterOrDigit(line.charAt(i)) do i += 1
         val x = if i > 0 then i - 1 else 0
         b.gotoPosition(x, b.cursorY)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.smap(
       "0",
       (w, b) => {
         b.gotoPosition(0, b.cursorY)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.smap(
@@ -862,8 +863,8 @@ object VimKeybindingRegistry {
       (w, b) => {
         val x = Math.max(0, b.getCurrentLine().length() - 1)
         b.gotoPosition(x, b.cursorY)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
     KeybindingTrie.smap(
@@ -871,8 +872,8 @@ object VimKeybindingRegistry {
       (w, b) => {
         val x = firstNonWhitespaceIndex(b.getCurrentLine())
         b.gotoPosition(x, b.cursorY)
-        w.ensureCursorVisible(b)
-        w.ensureCursorVisibleHorizontal(b)
+        w.ensureTextBufferCursorVisible(b)
+        w.ensureTextBufferCursorVisibleHorizontal(b)
       }
     )
 

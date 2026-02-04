@@ -11,9 +11,9 @@ class TelescopeComponent(resultsBuffer: TextBuffer, previewBuffer: TextBuffer) e
   private val resultsText: TextComponent = new TextComponent().setBuffer(resultsBuffer)
   private val previewText: TextComponent = new TextComponent().setBuffer(previewBuffer)
 
-  private var renderWindow: Window[TextBuffer] = uninitialized
+  private var renderWindow: Window = uninitialized
 
-  def setRenderWindow(window: Window[TextBuffer]): TelescopeComponent = {
+  def setRenderWindow(window: Window): TelescopeComponent = {
     this.renderWindow = window
     resultsText.setRenderWindow(window)
     previewText.setRenderWindow(window)

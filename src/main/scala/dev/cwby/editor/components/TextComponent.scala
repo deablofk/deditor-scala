@@ -27,7 +27,7 @@ class TextComponent extends IComponent {
   
 
   private var buffer: TextBuffer                                       = uninitialized
-  private var renderWindow: Window[TextBuffer]                         = uninitialized
+  private var renderWindow: Window                                     = uninitialized
   private var cursorVisible: Boolean                                   = true
   private var lastBlinkTime: Long                                      = 0
   private var cachedStyles: mutable.Map[String, mutable.Map[Int, Int]] = mutable.Map.empty
@@ -42,7 +42,7 @@ class TextComponent extends IComponent {
     buffer
   }
 
-  def setRenderWindow(window: Window[TextBuffer]): TextComponent = {
+  def setRenderWindow(window: Window): TextComponent = {
     this.renderWindow = window
     this
   }

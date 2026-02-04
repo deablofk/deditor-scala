@@ -10,18 +10,18 @@ final val SPLIT_NONE: Int       = 0
 final val SPLIT_VERTICAL: Int   = 1
 final val SPLIT_HORIZONTAL: Int = 2
 
-final class TiledWindow[Buffer](
+final class TiledWindow(
     initialX: Float,
     initialY: Float,
     initialWidth: Float,
     initialHeight: Float,
-    var father: TiledWindow[Buffer],
+    var father: TiledWindow,
     var splitRatio: Float = 0.5f,
-    var leftChild: TiledWindow[Buffer] = null,
-    var rightChild: TiledWindow[Buffer] = null,
+    var leftChild: TiledWindow = null,
+    var rightChild: TiledWindow = null,
     var splitType: Int = SPLIT_NONE,
-    private var callbacks: WindowCallbacks[Buffer] = WindowCallbacks.empty[Buffer]
-) extends Window[Buffer]("", initialX, initialY, initialWidth, initialHeight) {
+    private var callbacks: WindowCallbacks = WindowCallbacks.empty
+) extends Window("", initialX, initialY, initialWidth, initialHeight) {
 
   inline def isLeaf: Boolean = leftChild == null && rightChild == null
 
@@ -81,7 +81,7 @@ final class TiledWindow[Buffer](
       rightChild.updateSize(x, y + topHeight, width, bottomHeight)
   }
 
-  private def findNeighbor(direction: Int): TiledWindow[Buffer] = {
+  private def findNeighbor(direction: Int): TiledWindow = {
     var node = this
     while node.father != null do
       val parent  = node.father
@@ -100,7 +100,7 @@ final class TiledWindow[Buffer](
     null
   }
 
-  inline private def findLeaf(node: TiledWindow[Buffer]): TiledWindow[Buffer] = {
+  inline private def findLeaf(node: TiledWindow): TiledWindow = {
     var current = node
 
     while !current.isLeaf do
@@ -125,7 +125,7 @@ final class TiledWindow[Buffer](
     current
   }
 
-  inline private def move(direction: Int): TiledWindow[Buffer] = {
+  inline private def move(direction: Int): TiledWindow = {
     val neighbor = findNeighbor(direction)
 
     if neighbor != null then callbacks.onWindowFocused(neighbor)
@@ -133,15 +133,15 @@ final class TiledWindow[Buffer](
     neighbor
   }
 
-  inline def moveLeft(): TiledWindow[Buffer] = move(DIRECTION_LEFT)
+  inline def moveLeft(): TiledWindow = move(DIRECTION_LEFT)
 
-  inline def moveRight(): TiledWindow[Buffer] = move(DIRECTION_RIGHT)
+  inline def moveRight(): TiledWindow = move(DIRECTION_RIGHT)
 
-  inline def moveUp(): TiledWindow[Buffer] = move(DIRECTION_UP)
+  inline def moveUp(): TiledWindow = move(DIRECTION_UP)
 
-  inline def moveDown(): TiledWindow[Buffer] = move(DIRECTION_DOWN)
+  inline def moveDown(): TiledWindow = move(DIRECTION_DOWN)
 
-  inline private def reattachSibling(sibling: TiledWindow[Buffer], parent: TiledWindow[Buffer]): Unit = {
+  inline private def reattachSibling(sibling: TiledWindow, parent: TiledWindow): Unit = {
     val grandParent = parent.father
 
     sibling.father = grandParent
@@ -154,7 +154,7 @@ final class TiledWindow[Buffer](
     callbacks.onWindowFocused(findLeaf(sibling))
   }
 
-  inline private def clearParentReference(parent: TiledWindow[Buffer]): Unit = {
+  inline private def clearParentReference(parent: TiledWindow): Unit = {
     val grandParent = parent.father
 
     if grandParent != null then
@@ -164,7 +164,7 @@ final class TiledWindow[Buffer](
     if grandParent != null then callbacks.onWindowFocused(grandParent)
   }
 
-  def setCallbacks(cb: WindowCallbacks[Buffer]): Unit = {
+  def setCallbacks(cb: WindowCallbacks): Unit = {
     this.callbacks = cb
     if leftChild != null then leftChild.setCallbacks(cb)
     if rightChild != null then rightChild.setCallbacks(cb)

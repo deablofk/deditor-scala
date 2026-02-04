@@ -3,12 +3,12 @@ package dev.cwby.guitk.registry
 import dev.cwby.guitk.components.{FloatingWindow, TiledWindow, Window}
 import scala.collection.mutable
 
-final class WindowRegistry[Buffer] {
-  private val windows = mutable.Map[String, Window[Buffer]]()
-  private val idToWindow = mutable.Map[Long, Window[Buffer]]()
+final class WindowRegistry {
+  private val windows = mutable.Map[String, Window]()
+  private val idToWindow = mutable.Map[Long, Window]()
   private var nextId: Long = 0L
 
-  def register(name: String, window: Window[Buffer]): Long = {
+  def register(name: String, window: Window): Long = {
     val id = nextId
     nextId += 1
     windows.put(name, window)
@@ -16,14 +16,14 @@ final class WindowRegistry[Buffer] {
     id
   }
 
-  def registerAnonymous(window: Window[Buffer]): Long = {
+  def registerAnonymous(window: Window): Long = {
     val id = nextId
     nextId += 1
     idToWindow.put(id, window)
     id
   }
 
-  def unregister(name: String): Option[Window[Buffer]] = {
+  def unregister(name: String): Option[Window] = {
     windows.remove(name).map { window =>
       idToWindow.find(_._2 == window).foreach { case (id, _) =>
         idToWindow.remove(id)
@@ -32,7 +32,7 @@ final class WindowRegistry[Buffer] {
     }
   }
 
-  def unregisterById(id: Long): Option[Window[Buffer]] = {
+  def unregisterById(id: Long): Option[Window] = {
     idToWindow.remove(id).map { window =>
       windows.find(_._2 == window).foreach { case (name, _) =>
         windows.remove(name)
@@ -41,20 +41,20 @@ final class WindowRegistry[Buffer] {
     }
   }
 
-  def get(name: String): Option[Window[Buffer]] = windows.get(name)
+  def get(name: String): Option[Window] = windows.get(name)
 
-  def getById(id: Long): Option[Window[Buffer]] = idToWindow.get(id)
+  def getById(id: Long): Option[Window] = idToWindow.get(id)
 
   def contains(name: String): Boolean = windows.contains(name)
 
   def containsId(id: Long): Boolean = idToWindow.contains(id)
 
-  def findTiledWindows: Iterable[TiledWindow[Buffer]] = {
-    idToWindow.values.collect { case tw: TiledWindow[Buffer] => tw }
+  def findTiledWindows: Iterable[TiledWindow] = {
+    idToWindow.values.collect { case tw: TiledWindow => tw }
   }
 
-  def findFloatingWindows: Iterable[FloatingWindow[Buffer]] = {
-    idToWindow.values.collect { case fw: FloatingWindow[Buffer] => fw }
+  def findFloatingWindows: Iterable[FloatingWindow] = {
+    idToWindow.values.collect { case fw: FloatingWindow => fw }
   }
 
   def clear(): Unit = {
@@ -65,37 +65,37 @@ final class WindowRegistry[Buffer] {
 
   def size: Int = idToWindow.size
 
-  def allWindows: Iterable[Window[Buffer]] = idToWindow.values
+  def allWindows: Iterable[Window] = idToWindow.values
 
   def allNames: Iterable[String] = windows.keys
 }
 
 object WindowRegistry {
-  private val global = new WindowRegistry[Any]()
+  private val global = new WindowRegistry()
 
-  def getGlobal[Buffer]: WindowRegistry[Buffer] = global.asInstanceOf[WindowRegistry[Buffer]]
+  def getGlobal: WindowRegistry = global
 
-  def register[Buffer](name: String, window: Window[Buffer]): Long =
-    global.asInstanceOf[WindowRegistry[Buffer]].register(name, window)
+  def register(name: String, window: Window): Long =
+    global.register(name, window)
 
-  def registerAnonymous[Buffer](window: Window[Buffer]): Long =
-    global.asInstanceOf[WindowRegistry[Buffer]].registerAnonymous(window)
+  def registerAnonymous(window: Window): Long =
+    global.registerAnonymous(window)
 
-  def unregister[Buffer](name: String): Option[Window[Buffer]] =
-    global.asInstanceOf[WindowRegistry[Buffer]].unregister(name)
+  def unregister(name: String): Option[Window] =
+    global.unregister(name)
 
-  def unregisterById[Buffer](id: Long): Option[Window[Buffer]] =
-    global.asInstanceOf[WindowRegistry[Buffer]].unregisterById(id)
+  def unregisterById(id: Long): Option[Window] =
+    global.unregisterById(id)
 
-  def get[Buffer](name: String): Option[Window[Buffer]] =
-    global.asInstanceOf[WindowRegistry[Buffer]].get(name)
+  def get(name: String): Option[Window] =
+    global.get(name)
 
-  def getById[Buffer](id: Long): Option[Window[Buffer]] =
-    global.asInstanceOf[WindowRegistry[Buffer]].getById(id)
+  def getById(id: Long): Option[Window] =
+    global.getById(id)
 
-  def findTiledWindows[Buffer]: Iterable[TiledWindow[Buffer]] =
-    global.asInstanceOf[WindowRegistry[Buffer]].findTiledWindows
+  def findTiledWindows: Iterable[TiledWindow] =
+    global.findTiledWindows
 
-  def findFloatingWindows[Buffer]: Iterable[FloatingWindow[Buffer]] =
-    global.asInstanceOf[WindowRegistry[Buffer]].findFloatingWindows
+  def findFloatingWindows: Iterable[FloatingWindow] =
+    global.findFloatingWindows
 }
