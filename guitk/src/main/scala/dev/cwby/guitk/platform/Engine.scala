@@ -74,23 +74,24 @@ object Engine {
 
         case EVENT_QUIT | EVENT_WINDOW_CLOSE_REQUESTED =>
           shouldClose = true
-          onCloseCallback()
+          if onCloseCallback != null then onCloseCallback()
 
         case EVENT_KEY_DOWN =>
-          keyHandler.handle(event)
+          if keyHandler != null then keyHandler.handle(event)
 
         case EVENT_TEXT_INPUT =>
-          keyHandler.handleInput(event)
+          if keyHandler != null then keyHandler.handleInput(event)
 
         case EVENT_CLIPBOARD_UPDATE =>
-          onClipboardUpdateCallback(SDLClipboard.SDL_GetClipboardText())
+          if onClipboardUpdateCallback != null then
+            onClipboardUpdateCallback(SDLClipboard.SDL_GetClipboardText())
 
         case EVENT_WINDOW_RESIZED =>
           val (w, h) = SDLVideo.SDL_GetWindowSizeInPixels(window)
           width = w
           height = h
           renderer.updateProjection(w, h)
-          onResizeCallback(w, h)
+          if onResizeCallback != null then onResizeCallback(w, h)
         case _ => ()
       }
     }
@@ -98,7 +99,7 @@ object Engine {
 
   private inline def renderFrame(): Unit = {
     gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    onRenderCallback(width, height)
+    if onRenderCallback != null then onRenderCallback(width, height)
     SDLGL.SDL_GL_SwapWindow(window)
   }
 
