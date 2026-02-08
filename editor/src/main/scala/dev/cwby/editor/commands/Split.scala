@@ -16,10 +16,12 @@ import dev.cwby.editor.components.TextComponent
 @inline private def split(doSplit: TiledWindow => Unit): Boolean = {
   WindowManager.getCurrentWindow match {
     case tw: TiledWindow =>
+      val rootNode = WindowManager.getRootNode
       doSplit(tw)
       val component = ensureComponent(tw)
       tw.leftChild.component = component
       tw.rightChild.component = component
+      rootNode.setCallbacks(rootNode.getCallbacks)
       WindowManager.setCurrentWindow(tw.rightChild)
     case _ => ()
   }

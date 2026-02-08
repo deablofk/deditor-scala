@@ -146,7 +146,7 @@ final class TiledWindow(
 
     sibling.father = grandParent
 
-    if grandParent == null then callbacks.onWindowFocused(sibling)
+    if grandParent == null then callbacks.onRootNodeChanged(sibling)
     else if grandParent.leftChild eq parent then grandParent.leftChild = sibling
     else grandParent.rightChild = sibling
 
@@ -160,9 +160,12 @@ final class TiledWindow(
     if grandParent != null then
       if grandParent.leftChild eq parent then grandParent.leftChild = null
       else grandParent.rightChild = null
+    else callbacks.onRootNodeChanged(null)
 
-    if grandParent != null then callbacks.onWindowFocused(grandParent)
+    callbacks.onWindowFocused(grandParent)
   }
+
+  def getCallbacks: WindowCallbacks = callbacks
 
   def setCallbacks(cb: WindowCallbacks): Unit = {
     this.callbacks = cb

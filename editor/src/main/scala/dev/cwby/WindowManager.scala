@@ -24,17 +24,18 @@ object WindowManager {
 
     def onWindowFocused(window: Window): Unit = {
       setCurrentWindow(window)
-      window match {
-        case tw: TiledWindow => setRootNode(tw)
-        case _ => ()
-      }
     }
 
     def onRootWindowClosed(): Unit = {
       LSPManager.closeAllLsp()
       Engine.requestClose()
     }
+
+    def onRootNodeChanged(newRoot: TiledWindow): Unit = {
+      rootNode = newRoot
+    }
   }
+
   private var rootNode: TiledWindow = {
     val node = TiledWindow(0, 0, Engine.getWidth.toFloat, Engine.getHeight.toFloat - FontManager.getLineHeight(), null)
     node.setCallbacks(windowCallbacks)
