@@ -14,7 +14,7 @@ ThisBuild / scalacOptions ++= Seq(
 )
 
 lazy val root = (project in file("."))
-  .aggregate(editor)
+  .aggregate(editor, dway)
   .settings(
     name := "deditor-root",
     publish / skip := true
@@ -26,6 +26,30 @@ lazy val guitk = (project in file("guitk"))
     name := "guitk",
     nativeConfig := {
       nativeConfig.value
+        .withMode(Mode.debug)
+        .withSourceLevelDebuggingConfig(_.enableAll)
+    }
+  )
+
+lazy val dway = (project in file("dway"))
+  .enablePlugins(ScalaNativePlugin)
+  .dependsOn(guitk)
+  .settings(
+    name := "dway",
+    nativeConfig := {
+      val wrapperLibDir = (ThisBuild / baseDirectory).value / "target"
+
+      nativeConfig.value
+        .withLinkingOptions(nativeConfig.value.linkingOptions ++ Seq(
+          "-L/usr/local/lib",
+          s"-L$wrapperLibDir",
+          s"-Wl,-rpath,$wrapperLibDir",
+          "-lGL",
+          "-lSDL3",
+          "-lfreetype",
+          "-lharfbuzz",
+          "-lfreetype_harfbuzz_wrapper"
+        ))
         .withMode(Mode.debug)
         .withSourceLevelDebuggingConfig(_.enableAll)
     }
