@@ -48,7 +48,11 @@ lazy val dway = (project in file("dway"))
           "-lSDL3",
           "-lfreetype",
           "-lharfbuzz",
-          "-lfreetype_harfbuzz_wrapper"
+          "-lfreetype_harfbuzz_wrapper",
+          "-lwlroots-0.18",
+          "-lwayland-server",
+          "-lxkbcommon",
+          "-ldway_wlroots_bridge"
         ))
         .withMode(Mode.debug)
         .withSourceLevelDebuggingConfig(_.enableAll)

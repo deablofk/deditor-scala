@@ -42,3 +42,22 @@ echo "Creating FreeType+HarfBuzz shared library..."
 gcc -shared -o target/libfreetype_harfbuzz_wrapper.so target/freetype_harfbuzz_wrapper.o -lfreetype -lharfbuzz
 
 echo "FreeType+HarfBuzz wrapper library built: target/libfreetype_harfbuzz_wrapper.so"
+
+echo "Generating Wayland protocol headers..."
+wayland-scanner server-header /usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml target/xdg-shell-protocol.h
+
+echo "Compiling dway wlroots bridge..."
+gcc -c -fPIC -O2 \
+    $(pkg-config --cflags wlroots-0.18 wayland-server xkbcommon pixman-1) \
+    -DWLR_USE_UNSTABLE \
+    -I/usr/include \
+    -I/usr/local/include \
+    -Itarget \
+    dway/src/main/c/dway_wlroots_bridge.c \
+    -o target/dway_wlroots_bridge.o
+
+echo "Creating dway wlroots bridge shared library..."
+gcc -shared -o target/libdway_wlroots_bridge.so target/dway_wlroots_bridge.o \
+    $(pkg-config --libs wlroots-0.18 wayland-server xkbcommon pixman-1)
+
+echo "dway wlroots bridge library built: target/libdway_wlroots_bridge.so"
