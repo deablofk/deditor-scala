@@ -1,30 +1,31 @@
 package dev.cwby.guitk.text
 
-import dev.cwby.config.FontConfig
-import dev.cwby.getConfig
-import dev.cwby.guitk.text.{Font, TextShaper}
-
 import java.io.File
 import java.io.IOException
 
 object FontManager {
-  private val fontCfg: FontConfig     = getConfig.font
   private var defaultFont: TextShaper = _
   private var lineHeight: Float       = _
   private var avgWidth: Float         = _
+  private var currentFontFamily: String = _
+  private var currentFontSize: Int      = 0
 
-  try {
-    initializeFont()
-  } catch {
-    case e: IOException =>
-      throw new RuntimeException("Failed to initialize font", e)
+  def initialize(fontFamily: String, fontSize: Int): Unit = {
+    currentFontFamily = fontFamily
+    currentFontSize = fontSize
+    try {
+      initializeFont()
+    } catch {
+      case e: IOException =>
+        throw new RuntimeException("Failed to initialize font", e)
+    }
   }
 
   @throws[IOException]
   private def initializeFont(): Unit = {
-    val fontPath      = findFontPath(fontCfg.family)
+    val fontPath      = findFontPath(currentFontFamily)
     val fallbackFonts = Font.findSystemFallbackFonts()
-    defaultFont = new TextShaper(fontPath, fontCfg.size, fallbackFonts)
+    defaultFont = new TextShaper(fontPath, currentFontSize, fallbackFonts)
     lineHeight = defaultFont.getLineHeight()
     avgWidth = defaultFont.measureText("M")
   }
@@ -61,7 +62,7 @@ object FontManager {
   }
 
   def increaseFontSize(sizeIncrease: Int): Unit = {
-    fontCfg.size += sizeIncrease
+    currentFontSize += sizeIncrease
     try {
       if (defaultFont != null) {
         defaultFont.cleanup()

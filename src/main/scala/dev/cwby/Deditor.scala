@@ -8,6 +8,7 @@ import dev.cwby.config.TreeSitterParsersConfig
 import dev.cwby.config.readConfiguration
 import dev.cwby.editor.core.TextInteractionMode
 import dev.cwby.guitk.platform.Engine
+import dev.cwby.guitk.text.FontManager
 import dev.cwby.treesitter.TreeSitterGrammarManager
 import dev.cwby.editor.input.GlobalKeyHandler
 import dev.cwby.lsp.LSPManager
@@ -55,6 +56,7 @@ object Deditor {
     Engine.setOnClipboardUpdateCallback(text => setClipboardContent(ClipboardType.SYSTEM, text))
     
     Engine.run { renderer =>
+      FontManager.initialize(getConfig.font.family, getConfig.font.size)
       val editorRenderer = EditorRenderer(renderer)
       Engine.setOnRenderCallback((w, h) => editorRenderer.render(w, h))
     }
