@@ -9,7 +9,6 @@
 ![Tree-sitter](https://img.shields.io/badge/Tree--sitter-latest-green?style=flat)
 ![libvterm](https://img.shields.io/badge/libvterm-latest-yellow?style=flat)
 ![sbt](https://img.shields.io/badge/sbt-1.11.7-blue?style=flat&logo=sbt&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 
 A monorepo containing three Scala Native projects that share a common GUI toolkit. The projects are developed in parallel here for convenience and will be split into separate repositories once they reach maturity.
 
